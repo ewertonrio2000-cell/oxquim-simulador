@@ -7,6 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root {
   /* OXQUIM — Azul corporativo profundo + cinza neutro + âmbar de destaque */
@@ -830,11 +832,19 @@ table.sim select.icms-ent {
       </div>
     </div>
     <div class="header-actions">
-      <button class="btn btn-white-ghost" onclick="printReport()">
+      <button class="btn btn-white-ghost" onclick="exportPNG()" title="Salvar print do resultado em imagem PNG">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        Salvar PNG
+      </button>
+      <button class="btn btn-white-ghost" onclick="exportPDF()" title="Salvar print do resultado em PDF">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/><line x1="9" y1="11" x2="15" y2="11"/></svg>
+        Salvar PDF
+      </button>
+      <button class="btn btn-white-ghost" onclick="printReport()" title="Imprimir / Salvar como PDF do navegador">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
         Imprimir
       </button>
-      <button class="btn btn-white-ghost" onclick="exportCSV()">
+      <button class="btn btn-white-ghost" onclick="exportCSV()" title="Exportar dados em planilha CSV">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Exportar CSV
       </button>
@@ -1265,4 +1275,460 @@ function readTaxesFromForm() {
     if (debEl) ICMS_CAT[cat].deb = parseFloat(debEl.value) || 0;
   });
   FREIGHT_RJ = parseFloat(document.getElementById('freight_rj').value) || 0;
-  document.
+  const flbl = document.getElementById('freight-label');
+  if (flbl) flbl.textContent = FREIGHT_RJ.toFixed(2).replace('.', ',');
+}
+function writeTaxesToForm() {
+  ['food','cosm','feed'].forEach(cat => {
+    const credEl = document.getElementById(`tax_${cat}_icms_cred`);
+    const debEl = document.getElementById(`tax_${cat}_icms_deb`);
+    if (credEl) credEl.value = ICMS_CAT[cat].cred;
+    if (debEl) debEl.value = ICMS_CAT[cat].deb;
+  });
+  const f = document.getElementById('freight_rj');
+  if (f) f.value = FREIGHT_RJ;
+  const flbl = document.getElementById('freight-label');
+  if (flbl) flbl.textContent = FREIGHT_RJ.toFixed(2).replace('.', ',');
+}
+function syncRowIcmsFromCadastro() {
+  document.querySelectorAll('#simTable tbody tr').forEach(row => {
+    const cat = row.dataset.cat;
+    const ent = row.querySelector('.in-icms-ent');
+    const sai = row.querySelector('.in-icms-sai');
+    if (ent) ent.value = String(ICMS_CAT[cat].cred);
+    if (sai) sai.value = String(ICMS_CAT[cat].deb);
+  });
+}
+function saveTaxes() {
+  readTaxesFromForm();
+  syncRowIcmsFromCadastro();
+  recalcAll();
+  saveState();
+  showToast('Cadastro salvo e aplicado', 'success');
+}
+function resetTaxes() {
+  ICMS_CAT = JSON.parse(JSON.stringify(ICMS_DEFAULTS));
+  FREIGHT_RJ = 0.21;
+  writeTaxesToForm();
+  syncRowIcmsFromCadastro();
+  recalcAll();
+  saveState();
+  showToast('Padrões restaurados', 'success');
+}
+function resetRowsToDefaults() {
+  document.querySelectorAll('#simTable tbody tr').forEach(row => {
+    const d = ROW_DEFAULTS[row.dataset.cat];
+    row.querySelector('.in-custo-sp').value = d.custo_sp;
+    row.querySelector('.in-ll2-sp').value = d.ll2_sp;
+    row.querySelector('.in-ll2-rj').value = d.ll2_rj;
+    row.querySelector('.in-icms-ent').value = d.icms_ent;
+    row.querySelector('.in-icms-sai').value = d.icms_sai;
+  });
+  recalcAll();
+  saveState();
+  showToast('Valores da tabela restaurados', 'success');
+}
+
+/* ========= CORE CALC ========= */
+function calcRow(custo, sugg, cat, icmsDebPct, icmsCredPct) {
+  const f = FIXED[cat];
+  const B = custo, D = sugg;
+  const icms_deb = D * icmsDebPct / 100;
+  const icms_cred = B * icmsCredPct / 100;
+  const dif_icms = icms_deb - icms_cred;
+  const pis_deb = D * f.pis_deb / 100;
+  const cofins_deb = D * f.cofins_deb / 100;
+  const pis_cred = B * f.pis_cred / 100;
+  const cofins_cred = B * f.cofins_cred / 100;
+  const csll = D * f.csll / 100;
+  const tot_imp = dif_icms + pis_deb + cofins_deb - pis_cred - cofins_cred + csll;
+  const subtot = D - tot_imp;
+  const doVal = D * f.do / 100;
+  const corretor = D * f.corretor / 100;
+  const pl = subtot - doVal - corretor;
+  const ll = B > 0 ? (pl / B) * 100 : 0;
+  return { tot_imp, subtot, pl, ll };
+}
+
+function fmt(n, d=2) { return (isFinite(n) ? n : 0).toFixed(d).replace('.', ','); }
+function fmt3(n) { return (isFinite(n) ? n : 0).toFixed(3).replace('.', ','); }
+
+/* ========= ITERATION Sugg02 / LL alvo =========
+ * Regra: Sugg02 = max(preço_que_atinge_LL_alvo, Custo × MIN_MARKUP)
+ * O piso de margem mínima (6%) é aplicado quando o crédito de ICMS supera o débito,
+ * evitando que a fórmula tributária produza preço abaixo da margem mínima de venda.
+ */
+const MIN_MARKUP = 1.06; // piso: Custo + 6% (margem bruta mínima)
+function iterateSugg02(custo, ll2Target, cat, icmsDebPct, icmsCredPct) {
+  if (custo <= 0) return 0;
+  const step = 0.001;
+  const maxIter = 300000;
+  const f = FIXED[cat];
+  const a = 1 - (icmsDebPct + f.pis_deb + f.cofins_deb + f.csll + f.do + f.corretor) / 100;
+  const cRate = (icmsCredPct + f.pis_cred + f.cofins_cred) / 100;
+  let Danalytic;
+  if (a !== 0) Danalytic = ((ll2Target / 100) * custo - custo * cRate) / a;
+  let D = (isFinite(Danalytic) && Danalytic > custo)
+    ? Math.max(custo, Math.floor((Danalytic - 0.05) * 1000) / 1000)
+    : custo;
+  let Dformula = D;
+  for (let i = 0; i < maxIter; i++) {
+    D = Math.round((D + step) * 1000) / 1000;
+    if (calcRow(custo, D, cat, icmsDebPct, icmsCredPct).ll >= ll2Target - 1e-9) {
+      Dformula = D;
+      break;
+    }
+  }
+  const floorPrice = Math.round(custo * MIN_MARKUP * 1000) / 1000;
+  return Math.max(Dformula, floorPrice);
+}
+
+function recalcRow(row) {
+  const cat = row.dataset.cat;
+  const custoSP = parseFloat(row.querySelector('.in-custo-sp').value) || 0;
+  const custoRJ = custoSP + FREIGHT_RJ;
+  row.querySelector('.custo-rj').textContent = fmt(custoRJ);
+
+  const icmsDeb = parseFloat(row.querySelector('.in-icms-sai').value) || 0;
+  const icmsCred = parseFloat(row.querySelector('.in-icms-ent').value) || 0;
+
+  /* SP */
+  const ll2SP = parseFloat(row.querySelector('.in-ll2-sp').value) || 105;
+  const suggSP = iterateSugg02(custoSP, ll2SP, cat, icmsDeb, icmsCred);
+  const sp = calcRow(custoSP, suggSP, cat, icmsDeb, icmsCred);
+  row.querySelector('.sugg2-sp').textContent = fmt(suggSP);
+  row.querySelector('.tot-imp-sp').textContent = fmt(sp.tot_imp);
+  row.querySelector('.subtot-sp').textContent = fmt(sp.subtot);
+  row.querySelector('.pl-sp').textContent = fmt(sp.pl);
+  row.querySelector('.ll-sp').textContent = fmt(sp.ll, 2) + '%';
+
+  /* RJ */
+  const ll2RJ = parseFloat(row.querySelector('.in-ll2-rj').value) || 105;
+  const suggRJ = iterateSugg02(custoRJ, ll2RJ, cat, icmsDeb, icmsCred);
+  const rj = calcRow(custoRJ, suggRJ, cat, icmsDeb, icmsCred);
+  row.querySelector('.sugg2-rj').textContent = fmt(suggRJ);
+  row.querySelector('.tot-imp-rj').textContent = fmt(rj.tot_imp);
+  row.querySelector('.subtot-rj').textContent = fmt(rj.subtot);
+  row.querySelector('.pl-rj').textContent = fmt(rj.pl);
+  row.querySelector('.ll-rj').textContent = fmt(rj.ll, 2) + '%';
+
+  return { cat, custoSP, custoRJ, suggSP, suggRJ, ll2SP, ll2RJ };
+}
+
+function recalcAll() {
+  const summary = [];
+  document.querySelectorAll('#simTable tbody tr').forEach(row => {
+    summary.push(recalcRow(row));
+  });
+  updateSummary(summary);
+}
+
+function updateSummary(rows) {
+  const strip = document.getElementById('summaryStrip');
+  if (!strip) return;
+  const html = rows.map(r => {
+    const label = CAT_LABELS[r.cat] || r.cat.toUpperCase();
+    return `
+      <div class="kpi kpi-sp">
+        <div class="kpi-label">${label} · SP</div>
+        <div class="kpi-value">R$ ${fmt(r.suggSP)}</div>
+        <div class="kpi-sub">LL alvo ${fmt(r.ll2SP, 0)}%</div>
+      </div>
+      <div class="kpi kpi-rj">
+        <div class="kpi-label">${label} · RJ</div>
+        <div class="kpi-value">R$ ${fmt(r.suggRJ)}</div>
+        <div class="kpi-sub">LL alvo ${fmt(r.ll2RJ, 0)}%</div>
+      </div>`;
+  }).join('');
+  strip.innerHTML = html;
+}
+
+/* ========= TABS ========= */
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(b => {
+    b.classList.toggle('active', b.dataset.tab === name);
+  });
+  document.querySelectorAll('.tab-content').forEach(c => {
+    c.classList.toggle('active', c.id === 'tab-' + name);
+  });
+}
+
+/* ========= EVENT BINDING ========= */
+function bindRowInputs() {
+  document.querySelectorAll('#simTable tbody tr').forEach(row => {
+    const onChange = () => { recalcRow(row); recalcAll(); saveState(); };
+    row.querySelectorAll('input, select').forEach(el => {
+      el.addEventListener('input', onChange);
+      el.addEventListener('change', onChange);
+    });
+  });
+}
+
+function bindTabs() {
+  document.querySelectorAll('.tab').forEach(btn => {
+    btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+  });
+}
+
+function bindTaxForm() {
+  ['food','cosm','feed'].forEach(cat => {
+    const credEl = document.getElementById(`tax_${cat}_icms_cred`);
+    const debEl = document.getElementById(`tax_${cat}_icms_deb`);
+    if (credEl) credEl.addEventListener('change', () => { /* aguarda Salvar */ });
+    if (debEl)  debEl.addEventListener('change', () => { /* aguarda Salvar */ });
+  });
+  const f = document.getElementById('freight_rj');
+  if (f) f.addEventListener('input', () => {
+    const flbl = document.getElementById('freight-label');
+    if (flbl) flbl.textContent = (parseFloat(f.value) || 0).toFixed(2).replace('.', ',');
+  });
+}
+
+function bindClientInputs() {
+  ['client_name','client_cnpj','client_owner','client_ref','client_date','client_notes'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', saveState);
+  });
+}
+
+/* ========= ACTIONS ========= */
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.className = 'toast show ' + (type || '');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => { t.className = 'toast'; }, 2500);
+}
+
+function printReport() {
+  recalcAll();
+  setTimeout(() => window.print(), 100);
+}
+
+function exportCSV() {
+  const rows = [['Categoria','Custo SP','Custo RJ','ICMS Entrada','ICMS Saída','LL alvo SP','Sugg SP','LL real SP','LL alvo RJ','Sugg RJ','LL real RJ']];
+  document.querySelectorAll('#simTable tbody tr').forEach(row => {
+    const cat = CAT_LABELS[row.dataset.cat] || row.dataset.cat;
+    const cSP = row.querySelector('.in-custo-sp').value;
+    const cRJ = row.querySelector('.custo-rj').textContent;
+    const ent = row.querySelector('.in-icms-ent').value + '%';
+    const sai = row.querySelector('.in-icms-sai').value + '%';
+    const llSP = row.querySelector('.in-ll2-sp').value;
+    const sugSP = row.querySelector('.sugg2-sp').textContent;
+    const realSP = row.querySelector('.ll-sp').textContent;
+    const llRJ = row.querySelector('.in-ll2-rj').value;
+    const sugRJ = row.querySelector('.sugg2-rj').textContent;
+    const realRJ = row.querySelector('.ll-rj').textContent;
+    rows.push([cat, cSP, cRJ, ent, sai, llSP, sugSP, realSP, llRJ, sugRJ, realRJ]);
+  });
+  const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(';')).join('\n');
+  const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'simulador_oxquim_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('CSV exportado', 'success');
+}
+
+/* ========= EXPORT PNG / PDF (print da tabela) ========= */
+function buildExportSnapshot() {
+  recalcAll();
+  const wrap = document.createElement('div');
+  wrap.style.cssText = `
+    position: fixed; left: -10000px; top: 0;
+    width: 1400px; padding: 32px;
+    background: #ffffff; color: #0f172a;
+    font-family: 'Inter', system-ui, sans-serif;
+    box-sizing: border-box;
+  `;
+
+  const cName = (document.getElementById('client_name')?.value || '').trim();
+  const cCnpj = (document.getElementById('client_cnpj')?.value || '').trim();
+  const cOwner = (document.getElementById('client_owner')?.value || '').trim();
+  const cRef = (document.getElementById('client_ref')?.value || '').trim();
+  const cDate = (document.getElementById('client_date')?.value || '').trim();
+  const cNotes = (document.getElementById('client_notes')?.value || '').trim();
+  const today = new Date().toLocaleDateString('pt-BR');
+
+  const dateBR = cDate ? cDate.split('-').reverse().join('/') : today;
+
+  // Cabeçalho corporativo
+  const header = `
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; padding-bottom:16px; border-bottom:3px solid #0a2540; margin-bottom:18px;">
+      <div>
+        <div style="font-size:32px; font-weight:800; letter-spacing:0.04em; color:#0a2540;">OXQUIM</div>
+        <div style="font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:#64748b; margin-top:2px;">Soluções Químicas</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:18px; font-weight:700; color:#0a2540;">Simulador de Preços</div>
+        <div style="font-size:12px; color:#64748b; margin-top:2px;">Lucro Real · São Paulo &amp; Rio de Janeiro</div>
+        <div style="font-size:11px; color:#94a3b8; margin-top:6px;">Emitido em ${today}</div>
+      </div>
+    </div>
+  `;
+
+  // Bloco de cliente (só mostra os campos preenchidos)
+  const clientFields = [];
+  if (cName) clientFields.push(['Cliente', cName]);
+  if (cCnpj) clientFields.push(['CNPJ', cCnpj]);
+  if (cOwner) clientFields.push(['Responsável', cOwner]);
+  if (cRef) clientFields.push(['Referência', cRef]);
+  if (cDate) clientFields.push(['Data', dateBR]);
+  let clientBlock = '';
+  if (clientFields.length) {
+    const cells = clientFields.map(([k,v]) =>
+      `<div style="flex:1; min-width:200px; padding:8px 12px; background:#f3f7fb; border-left:3px solid #0a2540;">
+        <div style="font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:#64748b;">${k}</div>
+        <div style="font-size:13px; font-weight:600; color:#0f172a; margin-top:2px;">${v}</div>
+      </div>`).join('');
+    clientBlock = `<div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;">${cells}</div>`;
+    if (cNotes) {
+      clientBlock += `<div style="padding:10px 12px; background:#fef9c3; border-left:3px solid #b45309; margin-bottom:16px; font-size:12px; color:#78350f;"><b>Obs.:</b> ${cNotes}</div>`;
+    }
+  }
+
+  // Linhas da tabela
+  const tbodyRows = Array.from(document.querySelectorAll('#simTable tbody tr')).map(row => {
+    const cat = CAT_LABELS[row.dataset.cat] || row.dataset.cat;
+    return `<tr>
+      <td style="padding:10px 8px; font-weight:700; background:#0a2540; color:#fff;">${cat}</td>
+      <td style="padding:10px 8px; text-align:right; font-family:'JetBrains Mono',monospace;">${row.querySelector('.in-custo-sp').value}</td>
+      <td style="padding:10px 8px; text-align:right; font-family:'JetBrains Mono',monospace;">${row.querySelector('.custo-rj').textContent}</td>
+      <td style="padding:10px 8px; text-align:center;">${row.querySelector('.in-icms-ent').value}%</td>
+      <td style="padding:10px 8px; text-align:center;">${row.querySelector('.in-icms-sai').value}%</td>
+      <td style="padding:10px 8px; text-align:right; font-family:'JetBrains Mono',monospace;">${row.querySelector('.in-ll2-sp').value}%</td>
+      <td style="padding:10px 8px; text-align:right; font-family:'JetBrains Mono',monospace; font-weight:700; background:#0a2540; color:#fff;">${row.querySelector('.sugg2-sp').textContent}</td>
+      <td style="padding:10px 8px; text-align:right; font-family:'JetBrains Mono',monospace; color:#475569;">${row.querySelector('.ll-sp').textContent}</td>
+      <td style="padding:10px 8px; text-align:right; font-family:'JetBrains Mono',monospace;">${row.querySelector('.in-ll2-rj').value}%</td>
+      <td style="padding:10px 8px; text-align:right; font-family:'JetBrains Mono',monospace; font-weight:700; background:#0a2540; color:#fff;">${row.querySelector('.sugg2-rj').textContent}</td>
+      <td style="padding:10px 8px; text-align:right; font-family:'JetBrains Mono',monospace; color:#475569;">${row.querySelector('.ll-rj').textContent}</td>
+    </tr>`;
+  }).join('');
+
+  const table = `
+    <table style="width:100%; border-collapse:collapse; font-size:12px; border:1px solid #cbd5e1;">
+      <thead>
+        <tr style="background:#0a2540; color:#fff;">
+          <th rowspan="2" style="padding:10px 8px; text-align:left; border-right:1px solid #1e3a5f;">Categoria</th>
+          <th rowspan="2" style="padding:10px 8px; text-align:right; border-right:1px solid #1e3a5f;">Custo SP<br>(R$)</th>
+          <th rowspan="2" style="padding:10px 8px; text-align:right; border-right:1px solid #1e3a5f;">Custo RJ<br>(R$)</th>
+          <th rowspan="2" style="padding:10px 8px; text-align:center; border-right:1px solid #1e3a5f;">ICMS<br>Entrada</th>
+          <th rowspan="2" style="padding:10px 8px; text-align:center; border-right:2px solid #b45309;">ICMS<br>Saída</th>
+          <th colspan="3" style="padding:8px; text-align:center; background:#14406d; border-bottom:1px solid #1e3a5f; border-right:2px solid #b45309;">SÃO PAULO</th>
+          <th colspan="3" style="padding:8px; text-align:center; background:#374151;">RIO DE JANEIRO</th>
+        </tr>
+        <tr style="background:#1c5285; color:#fff; font-size:11px;">
+          <th style="padding:8px; text-align:right;">LL alvo</th>
+          <th style="padding:8px; text-align:right;">Valor Sug.</th>
+          <th style="padding:8px; text-align:right; border-right:2px solid #b45309;">LL real</th>
+          <th style="padding:8px; text-align:right; background:#4b5563;">LL alvo</th>
+          <th style="padding:8px; text-align:right; background:#4b5563;">Valor Sug.</th>
+          <th style="padding:8px; text-align:right; background:#4b5563;">LL real</th>
+        </tr>
+      </thead>
+      <tbody>${tbodyRows}</tbody>
+    </table>
+  `;
+
+  const footer = `
+    <div style="margin-top:18px; padding-top:12px; border-top:1px solid #cbd5e1; display:flex; justify-content:space-between; font-size:10px; color:#94a3b8;">
+      <span>OXQUIM · Simulador de Preços · Lucro Real</span>
+      <span>Cálculo iterativo do Valor Sugerido (LL alvo)</span>
+    </div>
+  `;
+
+  wrap.innerHTML = header + clientBlock + table + footer;
+  document.body.appendChild(wrap);
+  return wrap;
+}
+
+function buildExportFilename(ext) {
+  const cName = (document.getElementById('client_name')?.value || '').trim();
+  const today = new Date().toISOString().slice(0,10);
+  const slug = cName
+    ? cName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'')
+    : 'oxquim';
+  return `simulador_${slug}_${today}.${ext}`;
+}
+
+async function exportPNG() {
+  if (typeof html2canvas === 'undefined') {
+    showToast('Biblioteca de imagem não carregada — verifique sua conexão', 'error');
+    return;
+  }
+  const snap = buildExportSnapshot();
+  showToast('Gerando imagem...', 'success');
+  try {
+    const canvas = await html2canvas(snap, { scale: 2, backgroundColor: '#ffffff', useCORS: true });
+    const url = canvas.toDataURL('image/png');
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = buildExportFilename('png');
+    a.click();
+    showToast('Imagem PNG salva', 'success');
+  } catch (e) {
+    console.error(e);
+    showToast('Erro ao gerar imagem: ' + e.message, 'error');
+  } finally {
+    snap.remove();
+  }
+}
+
+async function exportPDF() {
+  if (typeof html2canvas === 'undefined' || !window.jspdf) {
+    showToast('Biblioteca de PDF não carregada — verifique sua conexão', 'error');
+    return;
+  }
+  const snap = buildExportSnapshot();
+  showToast('Gerando PDF...', 'success');
+  try {
+    const canvas = await html2canvas(snap, { scale: 2, backgroundColor: '#ffffff', useCORS: true });
+    const imgData = canvas.toDataURL('image/png');
+    const { jsPDF } = window.jspdf;
+    // A4 paisagem em mm: 297 x 210
+    const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+    const pageW = pdf.internal.pageSize.getWidth();
+    const pageH = pdf.internal.pageSize.getHeight();
+    const margin = 8;
+    const maxW = pageW - margin * 2;
+    const maxH = pageH - margin * 2;
+    // Ajusta proporcionalmente
+    const ratio = canvas.width / canvas.height;
+    let w = maxW, h = maxW / ratio;
+    if (h > maxH) { h = maxH; w = maxH * ratio; }
+    const x = (pageW - w) / 2;
+    const y = (pageH - h) / 2;
+    pdf.addImage(imgData, 'PNG', x, y, w, h);
+    pdf.save(buildExportFilename('pdf'));
+    showToast('PDF salvo', 'success');
+  } catch (e) {
+    console.error(e);
+    showToast('Erro ao gerar PDF: ' + e.message, 'error');
+  } finally {
+    snap.remove();
+  }
+}
+
+/* ========= INIT ========= */
+function init() {
+  loadState();
+  writeTaxesToForm();
+  syncRowIcmsFromCadastro();
+  bindRowInputs();
+  bindTabs();
+  bindTaxForm();
+  bindClientInputs();
+  recalcAll();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+</script>
+</body>
+</html>
