@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OXQUIM · Simulador de Preços — Lucro Real</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* OXQUIM — Azul corporativo profundo + cinza neutro + âmbar de destaque */
+  --brand-900: #0a2540;
+  --brand-800: #0f3057;
+  --brand-700: #14406d;
+  --brand-600: #1c5285;
+  --brand-500: #2d6ba3;
+  --brand-400: #5a8cc0;
+  --brand-100: #e6eef6;
+  --brand-50:  #f3f7fb;
+  --accent-500: #b45309;
+  --accent-600: #92400e;
+  --accent-100: #fef3c7;
+
+  /* Semantic */
+  --success: #047857;
+  --success-bg: #ecfdf5;
+  --warning: #b45309;
+  --warning-bg: #fef9c3;
+  --danger: #b91c1c;
+  --danger-bg: #fef2f2;
+
+  /* SP / RJ — tons sóbrios, ambos derivados da paleta corporativa */
+  --sp-900: #0a2540;
+  --sp-700: #14406d;
+  --sp-500: #2d6ba3;
+  --sp-200: #c5d4e2;
+  --sp-100: #e2eaf2;
+  --sp-50:  #f3f7fb;
+  --rj-900: #1f2937;
+  --rj-700: #374151;
+  --rj-500: #6b7280;
+  --rj-200: #d1d5db;
+  --rj-100: #e5e7eb;
+  --rj-50:  #f3f4f6;
+
+  /* Neutros com leve tom azulado */
+  --ink-900: #0f172a;
+  --ink-800: #1e293b;
+  --ink-700: #334155;
+  --ink-600: #475569;
+  --ink-500: #64748b;
+  --ink-400: #94a3b8;
+  --ink-300: #cbd5e1;
+  --ink-200: #e2e8f0;
+  --ink-100: #f1f5f9;
+  --ink-50:  #f8fafc;
+  --white:   #ffffff;
+
+  --shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
+  --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
+  --shadow:    0 4px 10px -2px rgba(15, 23, 42, 0.08), 0 2px 6px -3px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 10px 24px -8px rgba(15, 23, 42, 0.12), 0 4px 10px -4px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 20px 40px -12px rgba(15, 23, 42, 0.18);
+  --shadow-brand: 0 12px 28px -10px rgba(27, 42, 107, 0.35);
+
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+  font-feature-settings: 'cv02','cv03','cv04','cv11';
+  background:
+    radial-gradient(1200px 600px at -10% -10%, rgba(59, 82, 180, 0.08) 0%, transparent 50%),
+    radial-gradient(1000px 500px at 110% 10%, rgba(14, 165, 164, 0.06) 0%, transparent 50%),
+    linear-gradient(180deg, #f6f8fc 0%, #eef2f8 100%);
+  color: var(--ink-800);
+  min-height: 100vh;
+  padding: 28px;
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.container { max-width: 1920px; margin: 0 auto; }
+
+/* ========= HEADER (OXQUIM) ========= */
+.app-header {
+  background: linear-gradient(180deg, var(--brand-900) 0%, var(--brand-800) 100%);
+  color: #fff;
+  padding: 32px 40px;
+  border-radius: 4px;
+  box-shadow: var(--shadow-brand);
+  margin-bottom: 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 22px;
+  position: relative;
+  overflow: hidden;
+  border-top: 3px solid var(--accent-500);
+}
+.app-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg, transparent 0%, transparent 70%, rgba(180, 83, 9, 0.08) 100%);
+  pointer-events: none;
+}
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  position: relative;
+  z-index: 1;
+  flex-wrap: wrap;
+}
+.brand-wordmark {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-right: 28px;
+  border-right: 1px solid rgba(255, 255, 255, 0.18);
+}
+.brand-name {
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  color: #fff;
+  font-feature-settings: 'tnum';
+  text-shadow: 0 2px 0 rgba(0,0,0,0.15);
+}
+.brand-divider { display: none; }
+.brand-tagline {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  max-width: 100px;
+  line-height: 1.3;
+}
+.header-title h1 {
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  color: #fff;
+}
+.header-title .subtitle {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.65);
+  margin-top: 4px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.header-actions { display: flex; gap: 10px; flex-wrap: wrap; position: relative; z-index: 1; }
+@media (max-width: 768px) {
+  .brand-wordmark { padding-right: 0; border-right: none; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.18); }
+}
+
+/* ========= TABS ========= */
+.tabs {
+  display: inline-flex;
+  gap: 4px;
+  background: var(--white);
+  padding: 6px;
+  border-radius: 12px;
+  margin-bottom: 22px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--ink-200);
+}
+.tab {
+  padding: 10px 20px;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: 600;
+  color: var(--ink-500);
+  font-size: 13px;
+  letter-spacing: 0.01em;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  font-family: inherit;
+}
+.tab svg { width: 16px; height: 16px; }
+.tab:hover { color: var(--brand-700); background: var(--ink-50); }
+.tab.active {
+  background: linear-gradient(135deg, var(--brand-700) 0%, var(--brand-600) 100%);
+  color: #fff;
+  box-shadow: 0 4px 12px -2px rgba(27, 42, 107, 0.4);
+}
+.tab-content { display: none; }
+.tab-content.active { display: block; animation: fadeIn 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* ========= CARDS ========= */
+.card {
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  padding: 28px 32px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 20px;
+  border: 1px solid var(--ink-200);
+}
+.card h2 {
+  color: var(--brand-900);
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  letter-spacing: -0.015em;
+}
+.card h2 .icon {
+  width: 34px; height: 34px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, var(--brand-600), var(--brand-800));
+  color: #fff;
+  border-radius: 9px;
+  box-shadow: var(--shadow);
+}
+.card h2 .icon svg { width: 18px; height: 18px; }
+.card .card-desc {
+  color: var(--ink-500);
+  font-size: 13px;
+  margin-bottom: 22px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--ink-100);
+  line-height: 1.6;
+}
+.card .card-desc b { color: var(--ink-700); font-weight: 600; }
+
+/* ========= SUMMARY STRIP ========= */
+.summary-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  margin-bottom: 22px;
+}
+.kpi {
+  background: var(--white);
+  border: 1px solid var(--ink-200);
+  border-radius: var(--radius-lg);
+  padding: 16px 18px;
+  box-shadow: var(--shadow-xs);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+.kpi:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.kpi::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, var(--brand-500), var(--brand-700));
+}
+.kpi.kpi-sp::before { background: linear-gradient(180deg, var(--sp-500), var(--sp-900)); }
+.kpi.kpi-rj::before { background: linear-gradient(180deg, var(--rj-500), var(--rj-900)); }
+.kpi .kpi-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--ink-500);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+.kpi .kpi-value {
+  font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--brand-900);
+  letter-spacing: -0.02em;
+}
+.kpi.kpi-sp .kpi-value { color: var(--sp-900); }
+.kpi.kpi-rj .kpi-value { color: var(--rj-900); }
+.kpi .kpi-sub {
+  font-size: 11px;
+  color: var(--ink-500);
+  margin-top: 3px;
+  font-weight: 500;
+}
+
+/* ========= CLIENT INFO ========= */
+.client-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+.client-info .field { display: flex; flex-direction: column; }
+.client-info label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-500);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 7px;
+}
+.client-info input {
+  padding: 11px 14px;
+  border: 1.5px solid var(--ink-200);
+  border-radius: var(--radius);
+  font-size: 14px;
+  color: var(--ink-800);
+  background: var(--ink-50);
+  font-family: inherit;
+  font-weight: 500;
+  transition: all 0.18s;
+}
+.client-info input::placeholder { color: var(--ink-400); font-weight: 400; }
+.client-info input:hover { border-color: var(--ink-300); }
+.client-info input:focus {
+  outline: none;
+  border-color: var(--brand-500);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(59, 82, 180, 0.12);
+}
+
+/* ========= CATEGORY CARDS (Tax Registry) ========= */
+.cat-section {
+  margin-bottom: 16px;
+  padding: 24px 28px;
+  background: var(--white);
+  border-radius: 4px;
+  border: 1px solid var(--ink-200);
+  position: relative;
+  overflow: hidden;
+}
+.cat-section::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--brand-700);
+}
+.cat-section.food::before,
+.cat-section.cosm::before,
+.cat-section.feed::before { background: var(--brand-700); }
+.cat-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.category-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: 2px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  background: var(--brand-900);
+  color: #fff;
+  border: 1px solid var(--brand-900);
+}
+.cat-food .category-badge, .cat-badge-food,
+.cat-cosm .category-badge, .cat-badge-cosm,
+.cat-feed .category-badge, .cat-badge-feed {
+  background: var(--brand-900);
+  color: #fff;
+  border-color: var(--brand-900);
+}
+
+.tax-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+}
+.tax-item {
+  background: #fff;
+  padding: 16px;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--ink-200);
+  transition: all 0.2s;
+}
+.tax-item:hover { border-color: var(--ink-300); }
+.tax-item:focus-within { border-color: var(--brand-500); box-shadow: 0 0 0 4px rgba(59, 82, 180, 0.1); }
+.tax-item label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-500);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+.tax-item select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid var(--ink-300);
+  border-radius: 7px;
+  font-size: 14px;
+  background: #fff;
+  color: var(--ink-800);
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.18s;
+}
+.tax-item select:focus {
+  outline: none;
+  border-color: var(--brand-500);
+  box-shadow: 0 0 0 3px rgba(59, 82, 180, 0.12);
+}
+
+.fixed-box {
+  margin-top: 18px;
+  background: #fff;
+  border: 1.5px dashed var(--ink-300);
+  padding: 16px 18px;
+  border-radius: var(--radius);
+}
+.fixed-box h4 {
+  color: var(--ink-700);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.fixed-box h4::before { content: "🔒"; font-size: 11px; }
+.fixed-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 6px 20px;
+  font-size: 12.5px;
+  color: var(--ink-600);
+}
+.fixed-list span { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px dotted var(--ink-200); }
+.fixed-list span:last-child { border-bottom: none; }
+.fixed-list b {
+  color: var(--brand-900);
+  font-weight: 700;
+  font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  font-size: 12px;
+}
+
+.freight-box {
+  background: linear-gradient(135deg, var(--warning-bg) 0%, #fef3c7 100%);
+  border: 1.5px solid #fde68a;
+  padding: 16px 20px;
+  border-radius: var(--radius-lg);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  box-shadow: var(--shadow-xs);
+}
+.freight-box label {
+  font-weight: 700;
+  color: #78350f;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.freight-box label::before {
+  content: "";
+  display: inline-block;
+  width: 6px; height: 6px;
+  background: #b45309;
+  border-radius: 50%;
+}
+.freight-box input {
+  padding: 10px 14px;
+  border: 1.5px solid #fcd34d;
+  border-radius: 8px;
+  font-size: 14px;
+  width: 130px;
+  font-weight: 700;
+  background: #fff;
+  text-align: right;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+}
+.freight-box input:focus { outline: none; border-color: #d97706; box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2); }
+.freight-box .hint { font-size: 12px; color: #92400e; opacity: 0.85; font-weight: 500; }
+
+/* ========= SIMULATOR TABLE — minimalista, profissional ========= */
+.sim-table-wrapper {
+  overflow-x: auto;
+  border-radius: 4px;
+  border: 1px solid var(--ink-200);
+  background: #fff;
+}
+.sim-table-wrapper::-webkit-scrollbar { height: 8px; }
+.sim-table-wrapper::-webkit-scrollbar-track { background: var(--ink-50); }
+.sim-table-wrapper::-webkit-scrollbar-thumb { background: var(--ink-300); border-radius: 4px; }
+.sim-table-wrapper::-webkit-scrollbar-thumb:hover { background: var(--ink-400); }
+
+table.sim {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  font-size: 12.5px;
+  min-width: 1700px;
+  font-variant-numeric: tabular-nums;
+}
+table.sim th {
+  background: var(--brand-900);
+  color: #fff;
+  font-weight: 600;
+  font-size: 10.5px;
+  padding: 14px 8px;
+  text-align: center;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 2px solid var(--accent-500);
+  position: sticky;
+  top: 0;
+  z-index: 3;
+}
+table.sim th.rowh { background: var(--brand-900); }
+table.sim th.sub-sp,
+table.sim th.sub-rj {
+  background: var(--brand-700);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+table.sim th.group-sp,
+table.sim th.group-rj {
+  background: var(--brand-800);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 12px;
+  letter-spacing: 0.18em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+table.sim td {
+  padding: 12px 8px;
+  text-align: center;
+  border-right: 1px solid var(--ink-100);
+  border-bottom: 1px solid var(--ink-100);
+  font-weight: 500;
+  color: var(--ink-800);
+  background: #fff;
+  font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+}
+table.sim tbody tr:nth-child(even) td { background: var(--brand-50); }
+table.sim tbody tr:hover td { background: var(--brand-100); }
+table.sim tbody tr:hover td.label { background: var(--brand-100); }
+
+table.sim td.label {
+  text-align: left;
+  font-weight: 700;
+  background: var(--ink-50);
+  white-space: nowrap;
+  padding: 14px 18px;
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  box-shadow: 1px 0 0 var(--ink-200);
+  font-family: 'Inter', sans-serif;
+  color: var(--brand-900);
+  letter-spacing: 0.04em;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+table.sim tbody tr:nth-child(even) td.label { background: var(--brand-50); }
+
+table.sim td.input-cell {
+  background: #fffef5;
+  padding: 8px 6px;
+}
+table.sim tbody tr:nth-child(even) td.input-cell { background: #fffbe8; }
+
+table.sim td.calc-sp,
+table.sim td.calc-rj {
+  color: var(--ink-700);
+  font-weight: 500;
+}
+table.sim td.rj-custo {
+  background: var(--brand-50);
+  color: var(--brand-900);
+  font-weight: 700;
+}
+table.sim tbody tr:nth-child(even) td.rj-custo { background: var(--brand-100); }
+
+table.sim td.calc-ll-sp,
+table.sim td.calc-ll-rj {
+  font-weight: 700;
+  color: var(--brand-900);
+  font-size: 13px;
+  border-left: 2px solid var(--brand-200, var(--ink-200));
+}
+
+table.sim td.sugg-sp,
+table.sim td.sugg-rj {
+  background: var(--brand-900);
+  font-weight: 700;
+  color: #fff;
+  font-size: 13.5px;
+  letter-spacing: -0.01em;
+  border-right: 1px solid var(--brand-700);
+  border-bottom: 1px solid var(--brand-700);
+}
+table.sim tbody tr:nth-child(even) td.sugg-sp,
+table.sim tbody tr:nth-child(even) td.sugg-rj {
+  background: var(--brand-800);
+}
+table.sim tbody tr:hover td.sugg-sp,
+table.sim tbody tr:hover td.sugg-rj {
+  background: var(--accent-500);
+  color: #fff;
+}
+
+table.sim input, table.sim select {
+  width: 86px;
+  padding: 8px 10px;
+  border: 1px solid var(--ink-300);
+  border-radius: 3px;
+  font-size: 12.5px;
+  text-align: right;
+  font-weight: 600;
+  background: #fff;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  transition: all 0.15s ease;
+  color: var(--ink-800);
+}
+table.sim input:hover, table.sim select:hover { border-color: var(--brand-500); }
+table.sim input:focus, table.sim select:focus {
+  outline: none;
+  border-color: var(--brand-700);
+  box-shadow: 0 0 0 2px var(--brand-100);
+}
+table.sim select { text-align: center; cursor: pointer; }
+table.sim select.icms-sel {
+  background: #fff;
+  color: var(--ink-800);
+  border-color: var(--ink-300);
+}
+table.sim select.icms-ent {
+  background: var(--brand-50);
+  color: var(--brand-900);
+  border-color: var(--brand-200, #c5d4e2);
+  font-weight: 700;
+}
+
+/* ========= BUTTONS ========= */
+.btn {
+  padding: 11px 22px;
+  background: linear-gradient(180deg, var(--brand-600), var(--brand-700));
+  color: #fff;
+  border: none;
+  border-radius: 9px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-sm);
+  font-family: inherit;
+  letter-spacing: 0.01em;
+}
+.btn svg { width: 15px; height: 15px; }
+.btn:hover {
+  background: linear-gradient(180deg, var(--brand-700), var(--brand-800));
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
+}
+.btn:active { transform: translateY(0); box-shadow: var(--shadow-xs); }
+.btn-sec { background: linear-gradient(180deg, var(--ink-600), var(--ink-700)); }
+.btn-sec:hover { background: linear-gradient(180deg, var(--ink-700), var(--ink-800)); }
+.btn-warn {
+  background: linear-gradient(180deg, var(--accent-500), var(--accent-600));
+  color: #fff;
+}
+.btn-warn:hover { background: linear-gradient(180deg, var(--accent-600), #086f6e); }
+.btn-ghost {
+  background: #fff;
+  color: var(--brand-700);
+  border: 1.5px solid var(--ink-200);
+}
+.btn-ghost:hover {
+  background: var(--ink-50);
+  border-color: var(--brand-400);
+  color: var(--brand-800);
+}
+.btn-small { padding: 8px 14px; font-size: 12px; }
+.btn-white-ghost {
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  border: 1.5px solid rgba(255,255,255,0.22);
+  backdrop-filter: blur(8px);
+}
+.btn-white-ghost:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.35); }
+
+.controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  justify-content: space-between;
+  align-items: center;
+}
+.controls-right { display: flex; gap: 10px; flex-wrap: wrap; }
+
+/* ========= LEGEND ========= */
+.legend {
+  font-size: 12px;
+  color: var(--ink-600);
+  padding: 14px 18px;
+  background: var(--ink-50);
+  border: 1px solid var(--ink-200);
+  border-radius: var(--radius);
+  margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 22px;
+  font-weight: 500;
+}
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend .sw {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-xs);
+}
+
+/* ========= FOOTER ========= */
+.app-footer {
+  text-align: center;
+  color: var(--ink-500);
+  padding: 32px 24px 16px;
+  margin-top: 24px;
+  border-top: 1px solid var(--ink-200);
+}
+.app-footer .footer-brand {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  color: var(--brand-900);
+  margin-bottom: 8px;
+}
+.app-footer .footer-line {
+  font-size: 12px;
+  color: var(--ink-600);
+  margin-bottom: 4px;
+}
+.app-footer .footer-meta {
+  font-size: 10.5px;
+  color: var(--ink-400);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+/* ========= TOAST ========= */
+.toast {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  background: var(--ink-900);
+  color: #fff;
+  padding: 13px 22px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1000;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast.success { background: linear-gradient(135deg, var(--success), #059669); }
+.toast.error { background: linear-gradient(135deg, var(--danger), #b91c1c); }
+
+/* ========= PRINT ========= */
+@media print {
+  body { background: #fff; padding: 0; }
+  .app-header, .tabs, .controls, .legend, .app-footer, .header-actions, .freight-box, .summary-strip { display: none !important; }
+  .card { box-shadow: none; border: none; padding: 0; margin: 0; page-break-inside: avoid; }
+  .sim-table-wrapper { border: 1px solid #000; }
+  table.sim { font-size: 9.5px; min-width: unset; width: 100%; }
+  table.sim th { background: #0a2540 !important; color: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  @page { size: A3 landscape; margin: 10mm; }
+}
+
+/* ========= RESPONSIVE ========= */
+@media (max-width: 768px) {
+  body { padding: 14px; }
+  .app-header { padding: 20px; flex-direction: column; align-items: flex-start; }
+  .card { padding: 20px; }
+  .kpi .kpi-value { font-size: 18px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="header-left">
+      <div class="brand-wordmark">
+        <span class="brand-name">OXQUIM</span>
+        <span class="brand-divider"></span>
+        <span class="brand-tagline">Soluções Químicas</span>
+      </div>
+      <div class="header-title">
+        <h1>Simulador de Preços</h1>
+        <div class="subtitle">Lucro Real · São Paulo &amp; Rio de Janeiro</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-white-ghost" onclick="printReport()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Imprimir
+      </button>
+      <button class="btn btn-white-ghost" onclick="exportCSV()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Exportar CSV
+      </button>
+    </div>
+  </header>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" data-tab="sim">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      Simulador
+    </button>
+    <button class="tab" data-tab="tax">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Cadastro de Impostos
+    </button>
+    <button class="tab" data-tab="client">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Dados do Cliente
+    </button>
+  </div>
+
+  <!-- ============ CLIENT DATA ============ -->
+  <div id="tab-client" class="tab-content">
+    <div class="card">
+      <h2><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span> Dados do Cliente / Operação</h2>
+      <p class="card-desc">Informações que aparecem no relatório impresso. Preenchimento opcional.</p>
+      <div class="client-info">
+        <div class="field"><label>Nome da empresa / cliente</label><input id="client_name" type="text" placeholder="Ex.: Química XYZ Ltda."></div>
+        <div class="field"><label>CNPJ</label><input id="client_cnpj" type="text" placeholder="00.000.000/0000-00"></div>
+        <div class="field"><label>Responsável</label><input id="client_owner" type="text" placeholder="Nome do comprador / vendedor"></div>
+        <div class="field"><label>Referência da operação</label><input id="client_ref" type="text" placeholder="Ex.: OC 6560, Lote 650095"></div>
+        <div class="field"><label>Data</label><input id="client_date" type="date"></div>
+        <div class="field"><label>Observações</label><input id="client_notes" type="text" placeholder="Notas livres"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TAX REGISTRY ============ -->
+  <div id="tab-tax" class="tab-content">
+    <div class="card">
+      <h2><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span> Cadastro de Impostos</h2>
+      <p class="card-desc">
+        Configure o <b>ICMS de Entrada</b> (crédito sobre o custo de compra) e o <b>ICMS de Saída</b>
+        (débito sobre o preço de venda) para cada categoria. Os demais impostos são fixos na operação.
+      </p>
+
+      <div class="freight-box">
+        <label>Frete adicional RJ (Custo RJ = Custo SP + Frete):</label>
+        <input type="number" step="0.01" id="freight_rj" value="0.21">
+        <span class="hint">Padrão da empresa: R$ 0,21</span>
+      </div>
+
+      <!-- FOOD -->
+      <div class="cat-section food cat-food">
+        <div class="cat-title">
+          <span class="category-badge cat-badge-food">FOOD</span>
+        </div>
+        <div class="tax-row">
+          <div class="tax-item">
+            <label>ICMS Entrada (Crédito)</label>
+            <select id="tax_food_icms_cred">
+              <option value="4" selected>4%</option>
+              <option value="7">7%</option>
+              <option value="12">12%</option>
+              <option value="18">18%</option>
+              <option value="22">22%</option>
+            </select>
+          </div>
+          <div class="tax-item">
+            <label>ICMS Saída (Débito)</label>
+            <select id="tax_food_icms_deb">
+              <option value="4">4%</option>
+              <option value="7">7%</option>
+              <option value="12">12%</option>
+              <option value="18">18%</option>
+              <option value="22" selected>22%</option>
+            </select>
+          </div>
+        </div>
+        <div class="fixed-box">
+          <h4>Valores fixos (aplicados automaticamente)</h4>
+          <div class="fixed-list">
+            <span>PIS Débito <b>1,65%</b></span>
+            <span>COFINS Débito <b>7,60%</b></span>
+            <span>PIS Crédito <b>1,65%</b></span>
+            <span>COFINS Crédito <b>7,60%</b></span>
+            <span>CSLL/IR <b>1,00%</b></span>
+            <span>Despesa Operacional <b>7,60%</b></span>
+            <span>Corretor <b>0,00%</b></span>
+            <span>Mark-up padrão <b>1,171</b></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- COSMÉTICOS -->
+      <div class="cat-section cosm cat-cosm">
+        <div class="cat-title">
+          <span class="category-badge cat-badge-cosm">COSMÉTICOS / TINTAS / VERNIZES / PLÁSTICOS</span>
+        </div>
+        <div class="tax-row">
+          <div class="tax-item">
+            <label>ICMS Entrada (Crédito)</label>
+            <select id="tax_cosm_icms_cred">
+              <option value="4" selected>4%</option>
+              <option value="7">7%</option>
+              <option value="12">12%</option>
+              <option value="18">18%</option>
+              <option value="22">22%</option>
+            </select>
+          </div>
+          <div class="tax-item">
+            <label>ICMS Saída (Débito)</label>
+            <select id="tax_cosm_icms_deb">
+              <option value="4">4%</option>
+              <option value="7">7%</option>
+              <option value="12">12%</option>
+              <option value="18">18%</option>
+              <option value="22" selected>22%</option>
+            </select>
+          </div>
+        </div>
+        <div class="fixed-box">
+          <h4>Valores fixos (aplicados automaticamente)</h4>
+          <div class="fixed-list">
+            <span>PIS Débito <b>1,65%</b></span>
+            <span>COFINS Débito <b>7,60%</b></span>
+            <span>PIS Crédito <b>1,65%</b></span>
+            <span>COFINS Crédito <b>7,60%</b></span>
+            <span>CSLL/IR <b>1,00%</b></span>
+            <span>Despesa Operacional <b>3,80%</b></span>
+            <span>Corretor <b>0,00%</b></span>
+            <span>Mark-up padrão <b>1,171</b></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FEED -->
+      <div class="cat-section feed cat-feed">
+        <div class="cat-title">
+          <span class="category-badge cat-badge-feed">FEED</span>
+        </div>
+        <div class="tax-row">
+          <div class="tax-item">
+            <label>ICMS Entrada (Crédito)</label>
+            <select id="tax_feed_icms_cred">
+              <option value="4" selected>4%</option>
+              <option value="7">7%</option>
+              <option value="12">12%</option>
+              <option value="18">18%</option>
+              <option value="22">22%</option>
+            </select>
+          </div>
+          <div class="tax-item">
+            <label>ICMS Saída (Débito)</label>
+            <select id="tax_feed_icms_deb">
+              <option value="4">4%</option>
+              <option value="7">7%</option>
+              <option value="12" selected>12%</option>
+              <option value="18">18%</option>
+              <option value="22">22%</option>
+            </select>
+          </div>
+        </div>
+        <div class="fixed-box">
+          <h4>Valores fixos (aplicados automaticamente)</h4>
+          <div class="fixed-list">
+            <span>PIS Débito <b>1,65%</b></span>
+            <span>COFINS Débito <b>7,60%</b></span>
+            <span>PIS Crédito <b>1,65%</b></span>
+            <span>COFINS Crédito <b>7,60%</b></span>
+            <span>CSLL/IR <b>1,00%</b></span>
+            <span>Despesa Operacional <b>7,60%</b></span>
+            <span>Corretor <b>0,00%</b></span>
+            <span>Mark-up padrão <b>1,171</b></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div></div>
+        <div class="controls-right">
+          <button class="btn btn-sec" onclick="resetTaxes()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+            Restaurar padrões
+          </button>
+          <button class="btn" onclick="saveTaxes()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Salvar e aplicar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SIMULATOR ============ -->
+  <div id="tab-sim" class="tab-content active">
+    <!-- Summary KPIs -->
+    <div class="summary-strip" id="summaryStrip">
+      <!-- filled dynamically -->
+    </div>
+
+    <div class="card">
+      <h2><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span> Simulador de Preços — Lucro Real (SP + RJ)</h2>
+      <p class="card-desc">
+        Digite o <b>Custo SP</b>. O <b>Custo RJ</b> é calculado automaticamente (SP + frete R$ <span id="freight-label">0,21</span>).
+        Defina o <b>LL alvo</b> desejado — o sistema itera automaticamente o preço até atingir o lucro líquido desejado e mostra o <b>Valor Sugerido 02</b>.
+        As colunas de <b>Total Imp., Sub-total, PL e LL %</b> validam o resultado no preço sugerido.
+      </p>
+
+      <div class="sim-table-wrapper">
+        <table class="sim" id="simTable">
+          <thead>
+            <tr>
+              <th class="rowh" rowspan="2">Categoria</th>
+              <th class="rowh" rowspan="2">Custo SP<br>(R$)</th>
+              <th class="rowh" rowspan="2">Custo RJ<br>(R$)</th>
+              <th class="rowh" rowspan="2">Mark-up</th>
+              <th class="rowh" rowspan="2">ICMS<br>Entrada</th>
+              <th class="rowh" rowspan="2">ICMS<br>Saída</th>
+              <th class="group-sp" colspan="6">SÃO PAULO</th>
+              <th class="group-rj" colspan="6">RIO DE JANEIRO</th>
+            </tr>
+            <tr>
+              <th class="sub-sp">LL alvo (%)</th>
+              <th class="sub-sp">Valor Sug. 02</th>
+              <th class="sub-sp">Total Imp.</th>
+              <th class="sub-sp">Sub-total</th>
+              <th class="sub-sp">PL</th>
+              <th class="sub-sp">LL % real</th>
+              <th class="sub-rj">LL alvo (%)</th>
+              <th class="sub-rj">Valor Sug. 02</th>
+              <th class="sub-rj">Total Imp.</th>
+              <th class="sub-rj">Sub-total</th>
+              <th class="sub-rj">PL</th>
+              <th class="sub-rj">LL % real</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-cat="food">
+              <td class="label"><span class="category-badge cat-badge-food">FOOD</span></td>
+              <td class="input-cell"><input type="number" step="0.01" class="in-custo-sp" value="14.95"></td>
+              <td class="rj-custo custo-rj">15,16</td>
+              <td class="calc-sp markup-cell">1,171</td>
+              <td><select class="icms-ent in-icms-ent"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
+              <td><select class="icms-sel in-icms-sai"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option><option value="22" selected>22%</option></select></td>
+              <td class="input-cell"><input type="number" step="0.01" class="in-ll2-sp" value="105"></td>
+              <td class="sugg-sp sugg2-sp"></td>
+              <td class="calc-sp tot-imp-sp"></td>
+              <td class="calc-sp subtot-sp"></td>
+              <td class="calc-sp pl-sp"></td>
+              <td class="calc-ll-sp ll-sp"></td>
+              <td class="input-cell"><input type="number" step="0.01" class="in-ll2-rj" value="105"></td>
+              <td class="sugg-rj sugg2-rj"></td>
+              <td class="calc-rj tot-imp-rj"></td>
+              <td class="calc-rj subtot-rj"></td>
+              <td class="calc-rj pl-rj"></td>
+              <td class="calc-ll-rj ll-rj"></td>
+            </tr>
+            <tr data-cat="cosm">
+              <td class="label"><span class="category-badge cat-badge-cosm">COSMÉTICOS</span></td>
+              <td class="input-cell"><input type="number" step="0.01" class="in-custo-sp" value="14.95"></td>
+              <td class="rj-custo custo-rj">15,16</td>
+              <td class="calc-sp markup-cell">1,171</td>
+              <td><select class="icms-ent in-icms-ent"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
+              <td><select class="icms-sel in-icms-sai"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option><option value="22" selected>22%</option></select></td>
+              <td class="input-cell"><input type="number" step="0.01" class="in-ll2-sp" value="105"></td>
+              <td class="sugg-sp sugg2-sp"></td>
+              <td class="calc-sp tot-imp-sp"></td>
+              <td class="calc-sp subtot-sp"></td>
+              <td class="calc-sp pl-sp"></td>
+              <td class="calc-ll-sp ll-sp"></td>
+              <td class="input-cell"><input type="number" step="0.01" class="in-ll2-rj" value="105"></td>
+              <td class="sugg-rj sugg2-rj"></td>
+              <td class="calc-rj tot-imp-rj"></td>
+              <td class="calc-rj subtot-rj"></td>
+              <td class="calc-rj pl-rj"></td>
+              <td class="calc-ll-rj ll-rj"></td>
+            </tr>
+            <tr data-cat="feed">
+              <td class="label"><span class="category-badge cat-badge-feed">FEED</span></td>
+              <td class="input-cell"><input type="number" step="0.01" class="in-custo-sp" value="96.38"></td>
+              <td class="rj-custo custo-rj">96,59</td>
+              <td class="calc-sp markup-cell">1,171</td>
+              <td><select class="icms-ent in-icms-ent"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
+              <td><select class="icms-sel in-icms-sai"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
+              <td class="input-cell"><input type="number" step="0.01" class="in-ll2-sp" value="105"></td>
+              <td class="sugg-sp sugg2-sp"></td>
+              <td class="calc-sp tot-imp-sp"></td>
+              <td class="calc-sp subtot-sp"></td>
+              <td class="calc-sp pl-sp"></td>
+              <td class="calc-ll-sp ll-sp"></td>
+              <td class="input-cell"><input type="number" step="0.01" class="in-ll2-rj" value="105"></td>
+              <td class="sugg-rj sugg2-rj"></td>
+              <td class="calc-rj tot-imp-rj"></td>
+              <td class="calc-rj subtot-rj"></td>
+              <td class="calc-rj pl-rj"></td>
+              <td class="calc-ll-rj ll-rj"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="legend">
+        <span><span class="sw" style="background:#fffef5; border-color:#e5d9a8;"></span> Entrada manual</span>
+        <span><span class="sw" style="background:#e6eef6; border-color:#c5d4e2;"></span> ICMS Entrada</span>
+        <span><span class="sw" style="background:#ffffff; border-color:#cbd5e1;"></span> ICMS Saída</span>
+        <span><span class="sw" style="background:#0a2540;"></span> Valor Sugerido (resultado)</span>
+        <span><span class="sw" style="background:#f3f7fb; border-color:#c5d4e2;"></span> Cálculo intermediário</span>
+      </div>
+
+      <div class="controls">
+        <button class="btn btn-ghost btn-small" onclick="resetRowsToDefaults()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+          Restaurar valores
+        </button>
+        <div class="controls-right">
+          <button class="btn btn-warn" onclick="recalcAll(); showToast('Recalculado com sucesso', 'success');">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+            Recalcular + Iterar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="app-footer">
+    <div class="footer-brand">OXQUIM</div>
+    <div class="footer-line">Simulador de Preços · Lucro Real · Cálculo iterativo do Valor Sugerido</div>
+    <div class="footer-meta">Sistema corporativo · Uso interno</div>
+  </footer>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+/* =============================================================
+   SIMULADOR DE PREÇOS — Lucro Real · v2 Pro
+   Arquivo único HTML/CSS/JS · funciona offline em qualquer navegador
+   Dados persistidos em localStorage do navegador
+   Nesta versão: somente Valor Sugerido 02 (iterado pelo LL alvo)
+============================================================= */
+
+const STORAGE_KEY = 'simulador_precos_v2';
+
+/* ========= FIXED TAXES ========= */
+const FIXED = {
+  food: { pis_deb:1.65, cofins_deb:7.6, pis_cred:1.65, cofins_cred:7.6, csll:1, do:7.6, corretor:0, markup:1.171 },
+  cosm: { pis_deb:1.65, cofins_deb:7.6, pis_cred:1.65, cofins_cred:7.6, csll:1, do:3.8, corretor:0, markup:1.171 },
+  feed: { pis_deb:1.65, cofins_deb:7.6, pis_cred:1.65, cofins_cred:7.6, csll:1, do:7.6, corretor:0, markup:1.171 }
+};
+
+const ICMS_DEFAULTS = {
+  food: { cred: 4,  deb: 22 },
+  cosm: { cred: 4,  deb: 22 },
+  feed: { cred: 4,  deb: 12 }
+};
+let ICMS_CAT = JSON.parse(JSON.stringify(ICMS_DEFAULTS));
+let FREIGHT_RJ = 0.21;
+
+const ROW_DEFAULTS = {
+  food: { custo_sp: 14.95, ll2_sp: 105, ll2_rj: 105, icms_ent: 4,  icms_sai: 22 },
+  cosm: { custo_sp: 14.95, ll2_sp: 105, ll2_rj: 105, icms_ent: 4,  icms_sai: 22 },
+  feed: { custo_sp: 96.38, ll2_sp: 105, ll2_rj: 105, icms_ent: 4,  icms_sai: 12 }
+};
+
+const CAT_LABELS = { food: 'FOOD', cosm: 'COSMÉTICOS', feed: 'FEED' };
+
+/* ========= PERSISTENCE ========= */
+function saveState() {
+  try {
+    const state = {
+      ICMS_CAT, FREIGHT_RJ,
+      client: {
+        name: document.getElementById('client_name').value,
+        cnpj: document.getElementById('client_cnpj').value,
+        owner: document.getElementById('client_owner').value,
+        ref: document.getElementById('client_ref').value,
+        date: document.getElementById('client_date').value,
+        notes: document.getElementById('client_notes').value
+      },
+      rows: Array.from(document.querySelectorAll('#simTable tbody tr')).map(row => ({
+        cat: row.dataset.cat,
+        custo_sp: row.querySelector('.in-custo-sp').value,
+        ll2_sp: row.querySelector('.in-ll2-sp').value,
+        ll2_rj: row.querySelector('.in-ll2-rj').value,
+        icms_ent: row.querySelector('.in-icms-ent').value,
+        icms_sai: row.querySelector('.in-icms-sai').value
+      }))
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (e) { /* ignore quota/private mode */ }
+}
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const state = JSON.parse(raw);
+    if (state.ICMS_CAT) ICMS_CAT = state.ICMS_CAT;
+    if (typeof state.FREIGHT_RJ === 'number') FREIGHT_RJ = state.FREIGHT_RJ;
+    if (state.client) {
+      document.getElementById('client_name').value = state.client.name || '';
+      document.getElementById('client_cnpj').value = state.client.cnpj || '';
+      document.getElementById('client_owner').value = state.client.owner || '';
+      document.getElementById('client_ref').value = state.client.ref || '';
+      document.getElementById('client_date').value = state.client.date || '';
+      document.getElementById('client_notes').value = state.client.notes || '';
+    }
+    if (Array.isArray(state.rows)) {
+      state.rows.forEach(r => {
+        const row = document.querySelector(`#simTable tbody tr[data-cat="${r.cat}"]`);
+        if (!row) return;
+        row.querySelector('.in-custo-sp').value = r.custo_sp;
+        row.querySelector('.in-ll2-sp').value = r.ll2_sp;
+        row.querySelector('.in-ll2-rj').value = r.ll2_rj;
+        row.querySelector('.in-icms-ent').value = r.icms_ent;
+        row.querySelector('.in-icms-sai').value = r.icms_sai;
+      });
+    }
+  } catch (e) { /* ignore */ }
+}
+
+function readTaxesFromForm() {
+  ['food','cosm','feed'].forEach(cat => {
+    const credEl = document.getElementById(`tax_${cat}_icms_cred`);
+    const debEl = document.getElementById(`tax_${cat}_icms_deb`);
+    if (credEl) ICMS_CAT[cat].cred = parseFloat(credEl.value) || 0;
+    if (debEl) ICMS_CAT[cat].deb = parseFloat(debEl.value) || 0;
+  });
+  FREIGHT_RJ = parseFloat(document.getElementById('freight_rj').value) || 0;
+  document.
