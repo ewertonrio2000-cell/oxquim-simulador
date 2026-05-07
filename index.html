@@ -796,10 +796,54 @@ table.sim select.icms-ent {
 .toast.success { background: linear-gradient(135deg, var(--success), #059669); }
 .toast.error { background: linear-gradient(135deg, var(--danger), #b91c1c); }
 
+/* ========= CATEGORY FILTER ========= */
+.cat-filter {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 14px 16px;
+  background: var(--brand-50);
+  border: 1px solid var(--brand-100);
+  border-radius: var(--radius);
+  margin-bottom: 18px;
+}
+.cat-filter-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-600);
+  margin-right: 6px;
+}
+.cat-filter-btn {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 8px 16px;
+  background: #fff;
+  color: var(--brand-900);
+  border: 1.5px solid var(--brand-100);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.cat-filter-btn:hover {
+  border-color: var(--brand-700);
+  background: var(--brand-50);
+}
+.cat-filter-btn.active {
+  background: var(--brand-900);
+  color: #fff;
+  border-color: var(--brand-900);
+}
+table.sim tbody tr.row-hidden { display: none; }
+
 /* ========= PRINT ========= */
 @media print {
   body { background: #fff; padding: 0; }
-  .app-header, .tabs, .controls, .legend, .app-footer, .header-actions, .freight-box, .summary-strip { display: none !important; }
+  .app-header, .tabs, .controls, .legend, .app-footer, .header-actions, .freight-box, .summary-strip, .cat-filter { display: none !important; }
   .card { box-shadow: none; border: none; padding: 0; margin: 0; page-break-inside: avoid; }
   .sim-table-wrapper { border: 1px solid #000; }
   table.sim { font-size: 9.5px; min-width: unset; width: 100%; }
@@ -1054,6 +1098,14 @@ table.sim select.icms-ent {
         Defina o <b>LL alvo</b> desejado — o sistema itera automaticamente o preço até atingir o lucro líquido desejado e mostra o <b>Valor Sugerido 02</b>.
         As colunas de <b>Total Imp., Sub-total, PL e LL %</b> validam o resultado no preço sugerido.
       </p>
+
+      <div class="cat-filter" id="catFilter">
+        <span class="cat-filter-label">Visualizar categoria:</span>
+        <button class="cat-filter-btn active" data-cat="food">FOOD</button>
+        <button class="cat-filter-btn" data-cat="cosm">COSMÉTICOS</button>
+        <button class="cat-filter-btn" data-cat="feed">FEED</button>
+        <button class="cat-filter-btn" data-cat="all">TODAS</button>
+      </div>
 
       <div class="sim-table-wrapper">
         <table class="sim" id="simTable">
@@ -1354,33 +1406,35 @@ function fmt(n, d=2) { return (isFinite(n) ? n : 0).toFixed(d).replace('.', ',')
 function fmt3(n) { return (isFinite(n) ? n : 0).toFixed(3).replace('.', ','); }
 
 /* ========= ITERATION Sugg02 / LL alvo =========
- * Regra: Sugg02 = max(preço_que_atinge_LL_alvo, Custo × MIN_MARKUP)
- * O piso de margem mínima (6%) é aplicado quando o crédito de ICMS supera o débito,
- * evitando que a fórmula tributária produza preço abaixo da margem mínima de venda.
+ * Regra: itera o preço de venda até atingir o LL alvo desejado.
+ *
+ * Regra especial: quando o ICMS de Entrada (crédito) for MAIOR que o ICMS
+ * de Saída (débito), o LL alvo passa automaticamente para 110% — substituindo
+ * o LL alvo digitado pelo usuário (normalmente 105%). Isso compensa o
+ * crédito excedente que, na operação real, não pode ser totalmente aproveitado.
  */
-const MIN_MARKUP = 1.06; // piso: Custo + 6% (margem bruta mínima)
+const LL_TARGET_ENTRADA_MAIOR = 110;
 function iterateSugg02(custo, ll2Target, cat, icmsDebPct, icmsCredPct) {
   if (custo <= 0) return 0;
+  // Override: entrada > saída → usar LL alvo de 110%
+  const effectiveLLTarget = (icmsCredPct > icmsDebPct) ? LL_TARGET_ENTRADA_MAIOR : ll2Target;
   const step = 0.001;
   const maxIter = 300000;
   const f = FIXED[cat];
   const a = 1 - (icmsDebPct + f.pis_deb + f.cofins_deb + f.csll + f.do + f.corretor) / 100;
   const cRate = (icmsCredPct + f.pis_cred + f.cofins_cred) / 100;
   let Danalytic;
-  if (a !== 0) Danalytic = ((ll2Target / 100) * custo - custo * cRate) / a;
+  if (a !== 0) Danalytic = ((effectiveLLTarget / 100) * custo - custo * cRate) / a;
   let D = (isFinite(Danalytic) && Danalytic > custo)
     ? Math.max(custo, Math.floor((Danalytic - 0.05) * 1000) / 1000)
     : custo;
-  let Dformula = D;
   for (let i = 0; i < maxIter; i++) {
     D = Math.round((D + step) * 1000) / 1000;
-    if (calcRow(custo, D, cat, icmsDebPct, icmsCredPct).ll >= ll2Target - 1e-9) {
-      Dformula = D;
-      break;
+    if (calcRow(custo, D, cat, icmsDebPct, icmsCredPct).ll >= effectiveLLTarget - 1e-9) {
+      return D;
     }
   }
-  const floorPrice = Math.round(custo * MIN_MARKUP * 1000) / 1000;
-  return Math.max(Dformula, floorPrice);
+  return D;
 }
 
 function recalcRow(row) {
@@ -1426,7 +1480,8 @@ function recalcAll() {
 function updateSummary(rows) {
   const strip = document.getElementById('summaryStrip');
   if (!strip) return;
-  const html = rows.map(r => {
+  const visibleRows = (currentCategory === 'all') ? rows : rows.filter(r => r.cat === currentCategory);
+  const html = visibleRows.map(r => {
     const label = CAT_LABELS[r.cat] || r.cat.toUpperCase();
     return `
       <div class="kpi kpi-sp">
@@ -1441,6 +1496,25 @@ function updateSummary(rows) {
       </div>`;
   }).join('');
   strip.innerHTML = html;
+}
+
+/* ========= CATEGORY FILTER ========= */
+let currentCategory = 'food';
+function applyCatFilter(cat) {
+  currentCategory = cat;
+  document.querySelectorAll('.cat-filter-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.cat === cat);
+  });
+  document.querySelectorAll('#simTable tbody tr').forEach(row => {
+    const show = (cat === 'all') || row.dataset.cat === cat;
+    row.classList.toggle('row-hidden', !show);
+  });
+  recalcAll();
+}
+function bindCatFilter() {
+  document.querySelectorAll('.cat-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => applyCatFilter(btn.dataset.cat));
+  });
 }
 
 /* ========= TABS ========= */
@@ -1506,9 +1580,15 @@ function printReport() {
   setTimeout(() => window.print(), 100);
 }
 
+function getVisibleRows() {
+  return Array.from(document.querySelectorAll('#simTable tbody tr')).filter(row => {
+    return (currentCategory === 'all') || row.dataset.cat === currentCategory;
+  });
+}
+
 function exportCSV() {
   const rows = [['Categoria','Custo SP','Custo RJ','ICMS Entrada','ICMS Saída','LL alvo SP','Sugg SP','LL real SP','LL alvo RJ','Sugg RJ','LL real RJ']];
-  document.querySelectorAll('#simTable tbody tr').forEach(row => {
+  getVisibleRows().forEach(row => {
     const cat = CAT_LABELS[row.dataset.cat] || row.dataset.cat;
     const cSP = row.querySelector('.in-custo-sp').value;
     const cRJ = row.querySelector('.custo-rj').textContent;
@@ -1527,7 +1607,7 @@ function exportCSV() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'simulador_oxquim_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.download = buildExportFilename('csv');
   a.click();
   URL.revokeObjectURL(url);
   showToast('CSV exportado', 'success');
@@ -1554,6 +1634,7 @@ function buildExportSnapshot() {
   const today = new Date().toLocaleDateString('pt-BR');
 
   const dateBR = cDate ? cDate.split('-').reverse().join('/') : today;
+  const catLabel = currentCategory === 'all' ? 'Todas as Categorias' : (CAT_LABELS[currentCategory] || currentCategory.toUpperCase());
 
   // Cabeçalho corporativo
   const header = `
@@ -1565,6 +1646,7 @@ function buildExportSnapshot() {
       <div style="text-align:right;">
         <div style="font-size:18px; font-weight:700; color:#0a2540;">Simulador de Preços</div>
         <div style="font-size:12px; color:#64748b; margin-top:2px;">Lucro Real · São Paulo &amp; Rio de Janeiro</div>
+        <div style="font-size:13px; color:#0a2540; margin-top:6px; font-weight:600;">Categoria: <span style="background:#0a2540; color:#fff; padding:2px 10px; border-radius:4px; letter-spacing:0.05em;">${catLabel}</span></div>
         <div style="font-size:11px; color:#94a3b8; margin-top:6px;">Emitido em ${today}</div>
       </div>
     </div>
@@ -1590,8 +1672,8 @@ function buildExportSnapshot() {
     }
   }
 
-  // Linhas da tabela
-  const tbodyRows = Array.from(document.querySelectorAll('#simTable tbody tr')).map(row => {
+  // Linhas da tabela (apenas categoria selecionada)
+  const tbodyRows = getVisibleRows().map(row => {
     const cat = CAT_LABELS[row.dataset.cat] || row.dataset.cat;
     return `<tr>
       <td style="padding:10px 8px; font-weight:700; background:#0a2540; color:#fff;">${cat}</td>
@@ -1651,7 +1733,8 @@ function buildExportFilename(ext) {
   const slug = cName
     ? cName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'')
     : 'oxquim';
-  return `simulador_${slug}_${today}.${ext}`;
+  const catSlug = currentCategory === 'all' ? 'todas' : currentCategory;
+  return `simulador_${slug}_${catSlug}_${today}.${ext}`;
 }
 
 async function exportPNG() {
@@ -1721,7 +1804,8 @@ function init() {
   bindTabs();
   bindTaxForm();
   bindClientInputs();
-  recalcAll();
+  bindCatFilter();
+  applyCatFilter(currentCategory);
 }
 
 if (document.readyState === 'loading') {
