@@ -541,6 +541,11 @@ table.sim th.sub-rj {
   font-size: 10px;
   letter-spacing: 0.08em;
 }
+/* Coluna LL alvo oculta — calculada automaticamente, não editável pelo usuário */
+table.sim th.ll-target-col,
+table.sim td.ll-target-col {
+  display: none !important;
+}
 table.sim th.group-sp,
 table.sim th.group-rj {
   background: var(--brand-800);
@@ -955,7 +960,6 @@ table.sim tbody tr.row-hidden { display: none; }
               <option value="7">7%</option>
               <option value="12">12%</option>
               <option value="18">18%</option>
-              <option value="22">22%</option>
             </select>
           </div>
           <div class="tax-item">
@@ -997,7 +1001,6 @@ table.sim tbody tr.row-hidden { display: none; }
               <option value="7">7%</option>
               <option value="12">12%</option>
               <option value="18">18%</option>
-              <option value="22">22%</option>
             </select>
           </div>
           <div class="tax-item">
@@ -1039,7 +1042,6 @@ table.sim tbody tr.row-hidden { display: none; }
               <option value="7">7%</option>
               <option value="12">12%</option>
               <option value="18">18%</option>
-              <option value="22">22%</option>
             </select>
           </div>
           <div class="tax-item">
@@ -1095,7 +1097,7 @@ table.sim tbody tr.row-hidden { display: none; }
       <h2><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span> Simulador de Preços — Lucro Real (SP + RJ)</h2>
       <p class="card-desc">
         Digite o <b>Custo SP</b>. O <b>Custo RJ</b> é calculado automaticamente (SP + frete R$ <span id="freight-label">0,21</span>).
-        Defina o <b>LL alvo</b> desejado — o sistema itera automaticamente o preço até atingir o lucro líquido desejado e mostra o <b>Valor Sugerido 02</b>.
+        O <b>LL alvo</b> é definido automaticamente pelo sistema (105,01% padrão, 110% nos cenários FOOD 18→4 e COSM 18→4/7) e o preço é iterado até atingi-lo.
         As colunas de <b>Total Imp., Sub-total, PL e LL %</b> validam o resultado no preço sugerido.
       </p>
 
@@ -1117,17 +1119,17 @@ table.sim tbody tr.row-hidden { display: none; }
               <th class="rowh" rowspan="2">Mark-up</th>
               <th class="rowh" rowspan="2">ICMS<br>Entrada</th>
               <th class="rowh" rowspan="2">ICMS<br>Saída</th>
-              <th class="group-sp" colspan="6">SÃO PAULO</th>
-              <th class="group-rj" colspan="6">RIO DE JANEIRO</th>
+              <th class="group-sp" colspan="5">SÃO PAULO</th>
+              <th class="group-rj" colspan="5">RIO DE JANEIRO</th>
             </tr>
             <tr>
-              <th class="sub-sp">LL alvo (%)</th>
+              <th class="sub-sp ll-target-col">LL alvo (%)</th>
               <th class="sub-sp">Valor Sug. 02</th>
               <th class="sub-sp">Total Imp.</th>
               <th class="sub-sp">Sub-total</th>
               <th class="sub-sp">PL</th>
               <th class="sub-sp">LL % real</th>
-              <th class="sub-rj">LL alvo (%)</th>
+              <th class="sub-rj ll-target-col">LL alvo (%)</th>
               <th class="sub-rj">Valor Sug. 02</th>
               <th class="sub-rj">Total Imp.</th>
               <th class="sub-rj">Sub-total</th>
@@ -1141,15 +1143,15 @@ table.sim tbody tr.row-hidden { display: none; }
               <td class="input-cell"><input type="number" step="0.01" class="in-custo-sp" value="14.95"></td>
               <td class="rj-custo custo-rj">15,16</td>
               <td class="calc-sp markup-cell">1,171</td>
-              <td><select class="icms-ent in-icms-ent"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
+              <td><select class="icms-ent in-icms-ent"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
               <td><select class="icms-sel in-icms-sai"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option><option value="22" selected>22%</option></select></td>
-              <td class="input-cell"><input type="number" step="0.01" class="in-ll2-sp" value="105"></td>
+              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
               <td class="sugg-sp sugg2-sp"></td>
               <td class="calc-sp tot-imp-sp"></td>
               <td class="calc-sp subtot-sp"></td>
               <td class="calc-sp pl-sp"></td>
               <td class="calc-ll-sp ll-sp"></td>
-              <td class="input-cell"><input type="number" step="0.01" class="in-ll2-rj" value="105"></td>
+              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
               <td class="sugg-rj sugg2-rj"></td>
               <td class="calc-rj tot-imp-rj"></td>
               <td class="calc-rj subtot-rj"></td>
@@ -1161,15 +1163,15 @@ table.sim tbody tr.row-hidden { display: none; }
               <td class="input-cell"><input type="number" step="0.01" class="in-custo-sp" value="14.95"></td>
               <td class="rj-custo custo-rj">15,16</td>
               <td class="calc-sp markup-cell">1,171</td>
-              <td><select class="icms-ent in-icms-ent"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
+              <td><select class="icms-ent in-icms-ent"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
               <td><select class="icms-sel in-icms-sai"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option><option value="22" selected>22%</option></select></td>
-              <td class="input-cell"><input type="number" step="0.01" class="in-ll2-sp" value="105"></td>
+              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
               <td class="sugg-sp sugg2-sp"></td>
               <td class="calc-sp tot-imp-sp"></td>
               <td class="calc-sp subtot-sp"></td>
               <td class="calc-sp pl-sp"></td>
               <td class="calc-ll-sp ll-sp"></td>
-              <td class="input-cell"><input type="number" step="0.01" class="in-ll2-rj" value="105"></td>
+              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
               <td class="sugg-rj sugg2-rj"></td>
               <td class="calc-rj tot-imp-rj"></td>
               <td class="calc-rj subtot-rj"></td>
@@ -1181,15 +1183,15 @@ table.sim tbody tr.row-hidden { display: none; }
               <td class="input-cell"><input type="number" step="0.01" class="in-custo-sp" value="96.38"></td>
               <td class="rj-custo custo-rj">96,59</td>
               <td class="calc-sp markup-cell">1,171</td>
-              <td><select class="icms-ent in-icms-ent"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
+              <td><select class="icms-ent in-icms-ent"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
               <td><select class="icms-sel in-icms-sai"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
-              <td class="input-cell"><input type="number" step="0.01" class="in-ll2-sp" value="105"></td>
+              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
               <td class="sugg-sp sugg2-sp"></td>
               <td class="calc-sp tot-imp-sp"></td>
               <td class="calc-sp subtot-sp"></td>
               <td class="calc-sp pl-sp"></td>
               <td class="calc-ll-sp ll-sp"></td>
-              <td class="input-cell"><input type="number" step="0.01" class="in-ll2-rj" value="105"></td>
+              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
               <td class="sugg-rj sugg2-rj"></td>
               <td class="calc-rj tot-imp-rj"></td>
               <td class="calc-rj subtot-rj"></td>
@@ -1258,9 +1260,9 @@ let ICMS_CAT = JSON.parse(JSON.stringify(ICMS_DEFAULTS));
 let FREIGHT_RJ = 0.21;
 
 const ROW_DEFAULTS = {
-  food: { custo_sp: 14.95, ll2_sp: 105, ll2_rj: 105, icms_ent: 4,  icms_sai: 22 },
-  cosm: { custo_sp: 14.95, ll2_sp: 105, ll2_rj: 105, icms_ent: 4,  icms_sai: 22 },
-  feed: { custo_sp: 96.38, ll2_sp: 105, ll2_rj: 105, icms_ent: 4,  icms_sai: 12 }
+  food: { custo_sp: 14.95, ll2_sp: 105.01, ll2_rj: 105.01, icms_ent: 4,  icms_sai: 22 },
+  cosm: { custo_sp: 14.95, ll2_sp: 105.01, ll2_rj: 105.01, icms_ent: 4,  icms_sai: 22 },
+  feed: { custo_sp: 96.38, ll2_sp: 105.01, ll2_rj: 105.01, icms_ent: 4,  icms_sai: 12 }
 };
 
 const CAT_LABELS = { food: 'FOOD', cosm: 'COSMÉTICOS', feed: 'FEED' };
@@ -1408,16 +1410,25 @@ function fmt3(n) { return (isFinite(n) ? n : 0).toFixed(3).replace('.', ','); }
 /* ========= ITERATION Sugg02 / LL alvo =========
  * Regra: itera o preço de venda até atingir o LL alvo desejado.
  *
- * Regra especial: quando o ICMS de Entrada (crédito) for MAIOR que o ICMS
- * de Saída (débito), o LL alvo passa automaticamente para 110% — substituindo
- * o LL alvo digitado pelo usuário (normalmente 105%). Isso compensa o
- * crédito excedente que, na operação real, não pode ser totalmente aproveitado.
+ * Regra de LL alvo automático:
+ *   - Padrão: 105,01% para todos os casos.
+ *   - Override para 110%, exclusivamente nos seguintes cenários:
+ *       FOOD       → ICMS Entrada 18% e ICMS Saída 4%
+ *       COSMÉTICOS → ICMS Entrada 18% e ICMS Saída 4% OU 7%
+ *   - Demais combinações sempre usam 105,01%.
+ *   - O usuário NÃO pode editar o LL alvo manualmente (coluna oculta).
  */
-const LL_TARGET_ENTRADA_MAIOR = 110;
+const LL_TARGET_DEFAULT = 105.01;
+const LL_TARGET_OVERRIDE = 110;
+function getLLTarget(cat, icmsCredPct, icmsDebPct) {
+  if (cat === 'food' && icmsCredPct === 18 && icmsDebPct === 4) return LL_TARGET_OVERRIDE;
+  if (cat === 'cosm' && icmsCredPct === 18 && (icmsDebPct === 4 || icmsDebPct === 7)) return LL_TARGET_OVERRIDE;
+  return LL_TARGET_DEFAULT;
+}
 function iterateSugg02(custo, ll2Target, cat, icmsDebPct, icmsCredPct) {
   if (custo <= 0) return 0;
-  // Override: entrada > saída → usar LL alvo de 110%
-  const effectiveLLTarget = (icmsCredPct > icmsDebPct) ? LL_TARGET_ENTRADA_MAIOR : ll2Target;
+  // LL alvo é sempre calculado automaticamente conforme regra de negócio
+  const effectiveLLTarget = getLLTarget(cat, icmsCredPct, icmsDebPct);
   const step = 0.001;
   const maxIter = 300000;
   const f = FIXED[cat];
@@ -1446,9 +1457,15 @@ function recalcRow(row) {
   const icmsDeb = parseFloat(row.querySelector('.in-icms-sai').value) || 0;
   const icmsCred = parseFloat(row.querySelector('.in-icms-ent').value) || 0;
 
+  // LL alvo sempre calculado automaticamente (não editável)
+  const llTarget = getLLTarget(cat, icmsCred, icmsDeb);
+  const llSPInput = row.querySelector('.in-ll2-sp');
+  const llRJInput = row.querySelector('.in-ll2-rj');
+  if (llSPInput) llSPInput.value = llTarget;
+  if (llRJInput) llRJInput.value = llTarget;
+
   /* SP */
-  const ll2SP = parseFloat(row.querySelector('.in-ll2-sp').value) || 105;
-  const suggSP = iterateSugg02(custoSP, ll2SP, cat, icmsDeb, icmsCred);
+  const suggSP = iterateSugg02(custoSP, llTarget, cat, icmsDeb, icmsCred);
   const sp = calcRow(custoSP, suggSP, cat, icmsDeb, icmsCred);
   row.querySelector('.sugg2-sp').textContent = fmt(suggSP);
   row.querySelector('.tot-imp-sp').textContent = fmt(sp.tot_imp);
@@ -1457,8 +1474,7 @@ function recalcRow(row) {
   row.querySelector('.ll-sp').textContent = fmt(sp.ll, 2) + '%';
 
   /* RJ */
-  const ll2RJ = parseFloat(row.querySelector('.in-ll2-rj').value) || 105;
-  const suggRJ = iterateSugg02(custoRJ, ll2RJ, cat, icmsDeb, icmsCred);
+  const suggRJ = iterateSugg02(custoRJ, llTarget, cat, icmsDeb, icmsCred);
   const rj = calcRow(custoRJ, suggRJ, cat, icmsDeb, icmsCred);
   row.querySelector('.sugg2-rj').textContent = fmt(suggRJ);
   row.querySelector('.tot-imp-rj').textContent = fmt(rj.tot_imp);
@@ -1466,7 +1482,7 @@ function recalcRow(row) {
   row.querySelector('.pl-rj').textContent = fmt(rj.pl);
   row.querySelector('.ll-rj').textContent = fmt(rj.ll, 2) + '%';
 
-  return { cat, custoSP, custoRJ, suggSP, suggRJ, ll2SP, ll2RJ };
+  return { cat, custoSP, custoRJ, suggSP, suggRJ, ll2SP: llTarget, ll2RJ: llTarget };
 }
 
 function recalcAll() {
@@ -1681,10 +1697,10 @@ function buildExportSnapshot() {
       <td style="padding:10px 8px; text-align:right; font-family:'JetBrains Mono',monospace;">${row.querySelector('.custo-rj').textContent}</td>
       <td style="padding:10px 8px; text-align:center;">${row.querySelector('.in-icms-ent').value}%</td>
       <td style="padding:10px 8px; text-align:center;">${row.querySelector('.in-icms-sai').value}%</td>
-      <td style="padding:10px 8px; text-align:right; font-family:'JetBrains Mono',monospace;">${row.querySelector('.in-ll2-sp').value}%</td>
+      <td style="padding:10px 8px; text-align:right; font-family:'JetBrains Mono',monospace;">${parseFloat(row.querySelector('.in-ll2-sp').value).toFixed(2).replace('.', ',')}%</td>
       <td style="padding:10px 8px; text-align:right; font-family:'JetBrains Mono',monospace; font-weight:700; background:#0a2540; color:#fff;">${row.querySelector('.sugg2-sp').textContent}</td>
       <td style="padding:10px 8px; text-align:right; font-family:'JetBrains Mono',monospace; color:#475569;">${row.querySelector('.ll-sp').textContent}</td>
-      <td style="padding:10px 8px; text-align:right; font-family:'JetBrains Mono',monospace;">${row.querySelector('.in-ll2-rj').value}%</td>
+      <td style="padding:10px 8px; text-align:right; font-family:'JetBrains Mono',monospace;">${parseFloat(row.querySelector('.in-ll2-rj').value).toFixed(2).replace('.', ',')}%</td>
       <td style="padding:10px 8px; text-align:right; font-family:'JetBrains Mono',monospace; font-weight:700; background:#0a2540; color:#fff;">${row.querySelector('.sugg2-rj').textContent}</td>
       <td style="padding:10px 8px; text-align:right; font-family:'JetBrains Mono',monospace; color:#475569;">${row.querySelector('.ll-rj').textContent}</td>
     </tr>`;
