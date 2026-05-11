@@ -1097,7 +1097,7 @@ table.sim tbody tr.row-hidden { display: none; }
       <h2><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span> Simulador de Preços — Lucro Real (SP + RJ)</h2>
       <p class="card-desc">
         Digite o <b>Custo SP</b>. O <b>Custo RJ</b> é calculado automaticamente (SP + frete R$ <span id="freight-label">0,21</span>).
-        O <b>LL alvo</b> é definido automaticamente pelo sistema (105,01% padrão, 110% nos cenários FOOD 18→4 e COSM 18→4/7) e o preço é iterado até atingi-lo.
+        O <b>LL alvo</b> é definido automaticamente pelo sistema (105,01% padrão, 110,01% nos cenários FOOD 18→4 e COSM 18→4/7) e o preço é iterado até atingi-lo.
         As colunas de <b>Total Imp., Sub-total, PL e LL %</b> validam o resultado no preço sugerido.
       </p>
 
@@ -1216,7 +1216,7 @@ table.sim tbody tr.row-hidden { display: none; }
           Restaurar valores
         </button>
         <div class="controls-right">
-          <button class="btn btn-warn" onclick="recalcAll(); showToast('Recalculado com sucesso', 'success');">
+          <button class="btn btn-warn" style="display:none;" onclick="recalcAll(); showToast('Recalculado com sucesso', 'success');">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
             Recalcular + Iterar
           </button>
@@ -1412,14 +1412,14 @@ function fmt3(n) { return (isFinite(n) ? n : 0).toFixed(3).replace('.', ','); }
  *
  * Regra de LL alvo automático:
  *   - Padrão: 105,01% para todos os casos.
- *   - Override para 110%, exclusivamente nos seguintes cenários:
+ *   - Override para 110,01%, exclusivamente nos seguintes cenários:
  *       FOOD       → ICMS Entrada 18% e ICMS Saída 4%
  *       COSMÉTICOS → ICMS Entrada 18% e ICMS Saída 4% OU 7%
  *   - Demais combinações sempre usam 105,01%.
  *   - O usuário NÃO pode editar o LL alvo manualmente (coluna oculta).
  */
 const LL_TARGET_DEFAULT = 105.01;
-const LL_TARGET_OVERRIDE = 110;
+const LL_TARGET_OVERRIDE = 110.01;
 function getLLTarget(cat, icmsCredPct, icmsDebPct) {
   if (cat === 'food' && icmsCredPct === 18 && icmsDebPct === 4) return LL_TARGET_OVERRIDE;
   if (cat === 'cosm' && icmsCredPct === 18 && (icmsDebPct === 4 || icmsDebPct === 7)) return LL_TARGET_OVERRIDE;
