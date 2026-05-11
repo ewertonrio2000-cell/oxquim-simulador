@@ -844,6 +844,44 @@ table.sim select.icms-ent {
   border-color: var(--brand-900);
 }
 
+/* Campos rápidos (produto/KG/embalagem/OC/lote/fabricante) */
+.quick-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+  background: #fffef5;
+  border: 1px solid #e5d9a8;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+}
+.quick-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.quick-field label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #92400e;
+}
+.quick-field input {
+  padding: 7px 10px;
+  border: 1px solid #d4cfa8;
+  border-radius: 5px;
+  font-size: 13px;
+  font-family: inherit;
+  background: #fff;
+  color: #0a2540;
+}
+.quick-field input:focus {
+  outline: none;
+  border-color: #b45309;
+  box-shadow: 0 0 0 2px rgba(180, 83, 9, 0.15);
+}
+
 /* Slot control (checkboxes para ativar/desativar linhas) */
 .slot-control {
   display: flex;
@@ -1194,6 +1232,34 @@ table.sim tbody tr[data-slot="3"] td:first-child {
         <button class="cat-filter-btn" data-cat="all">TODAS</button>
       </div>
 
+      <!-- Campos rápidos do produto (sincronizados com aba Cadastro do Cliente) -->
+      <div class="quick-fields" id="quickFields">
+        <div class="quick-field">
+          <label>Produto</label>
+          <input type="text" id="quick_product" data-mirror="client_product" placeholder="Ex.: MANIMALTO 20">
+        </div>
+        <div class="quick-field">
+          <label>Compramos em KG</label>
+          <input type="text" id="quick_qty_kg" data-mirror="client_qty_kg" placeholder="Ex.: 11000 KG">
+        </div>
+        <div class="quick-field">
+          <label>Embalagem</label>
+          <input type="text" id="quick_packaging" data-mirror="client_packaging" placeholder="Ex.: SACOS DE 25 KG">
+        </div>
+        <div class="quick-field">
+          <label>OC</label>
+          <input type="text" id="quick_oc" data-mirror="client_oc" placeholder="Ex.: 1875 / 1898">
+        </div>
+        <div class="quick-field">
+          <label>Lote</label>
+          <input type="text" id="quick_lot" data-mirror="client_lot" placeholder="Ex.: GD1114 / GD1115">
+        </div>
+        <div class="quick-field">
+          <label>Fabricante</label>
+          <input type="text" id="quick_manufacturer" data-mirror="client_manufacturer" placeholder="Ex.: INDEMIL">
+        </div>
+      </div>
+
       <!-- Controle de linhas ativas por categoria -->
       <div class="slot-control" id="slotControl">
         <span class="slot-control-label">Linhas ativas:</span>
@@ -1227,18 +1293,20 @@ table.sim tbody tr[data-slot="3"] td:first-child {
               <th class="rowh" rowspan="2">Custo SP<br>(R$)</th>
               <th class="rowh" rowspan="2">Custo RJ<br>(R$)</th>
               <th class="rowh" rowspan="2">Mark-up</th>
-              <th class="rowh" rowspan="2">ICMS<br>Entrada</th>
-              <th class="rowh" rowspan="2">ICMS<br>Saída</th>
-              <th class="group-sp" colspan="5">SÃO PAULO</th>
-              <th class="group-rj" colspan="5">RIO DE JANEIRO</th>
+              <th class="group-sp" colspan="8">SÃO PAULO</th>
+              <th class="group-rj" colspan="8">RIO DE JANEIRO</th>
             </tr>
             <tr>
+              <th class="sub-sp">ICMS<br>Entrada</th>
+              <th class="sub-sp">ICMS<br>Saída</th>
               <th class="sub-sp ll-target-col">LL alvo (%)</th>
               <th class="sub-sp">Valor Sug. 02</th>
               <th class="sub-sp">Total Imp.</th>
               <th class="sub-sp">Sub-total</th>
               <th class="sub-sp">PL</th>
               <th class="sub-sp">LL % real</th>
+              <th class="sub-rj">ICMS<br>Entrada</th>
+              <th class="sub-rj">ICMS<br>Saída</th>
               <th class="sub-rj ll-target-col">LL alvo (%)</th>
               <th class="sub-rj">Valor Sug. 02</th>
               <th class="sub-rj">Total Imp.</th>
@@ -1254,14 +1322,16 @@ table.sim tbody tr[data-slot="3"] td:first-child {
               <td class="input-cell" rowspan="3"><input type="number" step="0.01" class="in-custo-sp" value="14.95"></td>
               <td class="rj-custo custo-rj" rowspan="3">15,16</td>
               <td class="calc-sp markup-cell" rowspan="3">1,171</td>
-              <td><select class="icms-ent in-icms-ent"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
+              <td><select class="icms-ent in-icms-ent-sp"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
               <td class="sugg-sp sugg2-sp"></td>
               <td class="calc-sp tot-imp-sp"></td>
               <td class="calc-sp subtot-sp"></td>
               <td class="calc-sp pl-sp"></td>
               <td class="calc-ll-sp ll-sp"></td>
+              <td><select class="icms-ent in-icms-ent-rj"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
               <td class="sugg-rj sugg2-rj"></td>
               <td class="calc-rj tot-imp-rj"></td>
@@ -1270,14 +1340,16 @@ table.sim tbody tr[data-slot="3"] td:first-child {
               <td class="calc-ll-rj ll-rj"></td>
             </tr>
             <tr data-cat="food" data-slot="2">
-              <td><select class="icms-ent in-icms-ent"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
+              <td><select class="icms-ent in-icms-ent-sp"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
               <td class="sugg-sp sugg2-sp"></td>
               <td class="calc-sp tot-imp-sp"></td>
               <td class="calc-sp subtot-sp"></td>
               <td class="calc-sp pl-sp"></td>
               <td class="calc-ll-sp ll-sp"></td>
+              <td><select class="icms-ent in-icms-ent-rj"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
               <td class="sugg-rj sugg2-rj"></td>
               <td class="calc-rj tot-imp-rj"></td>
@@ -1286,14 +1358,16 @@ table.sim tbody tr[data-slot="3"] td:first-child {
               <td class="calc-ll-rj ll-rj"></td>
             </tr>
             <tr data-cat="food" data-slot="3" class="slot-last">
-              <td><select class="icms-ent in-icms-ent"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="18" selected>18%</option><option value="22">22%</option></select></td>
+              <td><select class="icms-ent in-icms-ent-sp"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="18" selected>18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
               <td class="sugg-sp sugg2-sp"></td>
               <td class="calc-sp tot-imp-sp"></td>
               <td class="calc-sp subtot-sp"></td>
               <td class="calc-sp pl-sp"></td>
               <td class="calc-ll-sp ll-sp"></td>
+              <td><select class="icms-ent in-icms-ent-rj"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option><option value="22" selected>22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
               <td class="sugg-rj sugg2-rj"></td>
               <td class="calc-rj tot-imp-rj"></td>
@@ -1301,21 +1375,22 @@ table.sim tbody tr[data-slot="3"] td:first-child {
               <td class="calc-rj pl-rj"></td>
               <td class="calc-ll-rj ll-rj"></td>
             </tr>
-
-            <!-- ===================== COSMÉTICOS ===================== -->
+            <!-- ===================== COSM ===================== -->
             <tr data-cat="cosm" data-slot="1" class="slot-first">
               <td class="label" rowspan="3"><span class="category-badge cat-badge-cosm">COSMÉTICOS</span></td>
               <td class="input-cell" rowspan="3"><input type="number" step="0.01" class="in-custo-sp" value="14.95"></td>
               <td class="rj-custo custo-rj" rowspan="3">15,16</td>
               <td class="calc-sp markup-cell" rowspan="3">1,171</td>
-              <td><select class="icms-ent in-icms-ent"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
+              <td><select class="icms-ent in-icms-ent-sp"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
               <td class="sugg-sp sugg2-sp"></td>
               <td class="calc-sp tot-imp-sp"></td>
               <td class="calc-sp subtot-sp"></td>
               <td class="calc-sp pl-sp"></td>
               <td class="calc-ll-sp ll-sp"></td>
+              <td><select class="icms-ent in-icms-ent-rj"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
               <td class="sugg-rj sugg2-rj"></td>
               <td class="calc-rj tot-imp-rj"></td>
@@ -1324,14 +1399,16 @@ table.sim tbody tr[data-slot="3"] td:first-child {
               <td class="calc-ll-rj ll-rj"></td>
             </tr>
             <tr data-cat="cosm" data-slot="2">
-              <td><select class="icms-ent in-icms-ent"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
+              <td><select class="icms-ent in-icms-ent-sp"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
               <td class="sugg-sp sugg2-sp"></td>
               <td class="calc-sp tot-imp-sp"></td>
               <td class="calc-sp subtot-sp"></td>
               <td class="calc-sp pl-sp"></td>
               <td class="calc-ll-sp ll-sp"></td>
+              <td><select class="icms-ent in-icms-ent-rj"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
               <td class="sugg-rj sugg2-rj"></td>
               <td class="calc-rj tot-imp-rj"></td>
@@ -1340,14 +1417,16 @@ table.sim tbody tr[data-slot="3"] td:first-child {
               <td class="calc-ll-rj ll-rj"></td>
             </tr>
             <tr data-cat="cosm" data-slot="3" class="slot-last">
-              <td><select class="icms-ent in-icms-ent"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="18" selected>18%</option><option value="22">22%</option></select></td>
+              <td><select class="icms-ent in-icms-ent-sp"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="18" selected>18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
               <td class="sugg-sp sugg2-sp"></td>
               <td class="calc-sp tot-imp-sp"></td>
               <td class="calc-sp subtot-sp"></td>
               <td class="calc-sp pl-sp"></td>
               <td class="calc-ll-sp ll-sp"></td>
+              <td><select class="icms-ent in-icms-ent-rj"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option><option value="22" selected>22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
               <td class="sugg-rj sugg2-rj"></td>
               <td class="calc-rj tot-imp-rj"></td>
@@ -1355,21 +1434,22 @@ table.sim tbody tr[data-slot="3"] td:first-child {
               <td class="calc-rj pl-rj"></td>
               <td class="calc-ll-rj ll-rj"></td>
             </tr>
-
             <!-- ===================== FEED ===================== -->
             <tr data-cat="feed" data-slot="1" class="slot-first">
               <td class="label" rowspan="3"><span class="category-badge cat-badge-feed">FEED</span></td>
               <td class="input-cell" rowspan="3"><input type="number" step="0.01" class="in-custo-sp" value="96.38"></td>
               <td class="rj-custo custo-rj" rowspan="3">96,59</td>
               <td class="calc-sp markup-cell" rowspan="3">1,171</td>
-              <td><select class="icms-ent in-icms-ent"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
+              <td><select class="icms-ent in-icms-ent-sp"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
               <td class="sugg-sp sugg2-sp"></td>
               <td class="calc-sp tot-imp-sp"></td>
               <td class="calc-sp subtot-sp"></td>
               <td class="calc-sp pl-sp"></td>
               <td class="calc-ll-sp ll-sp"></td>
+              <td><select class="icms-ent in-icms-ent-rj"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
               <td class="sugg-rj sugg2-rj"></td>
               <td class="calc-rj tot-imp-rj"></td>
@@ -1378,14 +1458,16 @@ table.sim tbody tr[data-slot="3"] td:first-child {
               <td class="calc-ll-rj ll-rj"></td>
             </tr>
             <tr data-cat="feed" data-slot="2">
-              <td><select class="icms-ent in-icms-ent"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
+              <td><select class="icms-ent in-icms-ent-sp"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
               <td class="sugg-sp sugg2-sp"></td>
               <td class="calc-sp tot-imp-sp"></td>
               <td class="calc-sp subtot-sp"></td>
               <td class="calc-sp pl-sp"></td>
               <td class="calc-ll-sp ll-sp"></td>
+              <td><select class="icms-ent in-icms-ent-rj"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
               <td class="sugg-rj sugg2-rj"></td>
               <td class="calc-rj tot-imp-rj"></td>
@@ -1394,14 +1476,16 @@ table.sim tbody tr[data-slot="3"] td:first-child {
               <td class="calc-ll-rj ll-rj"></td>
             </tr>
             <tr data-cat="feed" data-slot="3" class="slot-last">
-              <td><select class="icms-ent in-icms-ent"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="18" selected>18%</option><option value="22">22%</option></select></td>
+              <td><select class="icms-ent in-icms-ent-sp"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="18" selected>18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
               <td class="sugg-sp sugg2-sp"></td>
               <td class="calc-sp tot-imp-sp"></td>
               <td class="calc-sp subtot-sp"></td>
               <td class="calc-sp pl-sp"></td>
               <td class="calc-ll-sp ll-sp"></td>
+              <td><select class="icms-ent in-icms-ent-rj"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="18" selected>18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
               <td class="sugg-rj sugg2-rj"></td>
               <td class="calc-rj tot-imp-rj"></td>
@@ -1503,8 +1587,10 @@ function saveState() {
         custo_sp: row.querySelector('.in-custo-sp')?.value || '',
         ll2_sp: row.querySelector('.in-ll2-sp')?.value || '',
         ll2_rj: row.querySelector('.in-ll2-rj')?.value || '',
-        icms_ent: row.querySelector('.in-icms-ent')?.value || '',
-        icms_sai: row.querySelector('.in-icms-sai')?.value || ''
+        icms_ent_sp: row.querySelector('.in-icms-ent-sp')?.value || '',
+        icms_sai_sp: row.querySelector('.in-icms-sai-sp')?.value || '',
+        icms_ent_rj: row.querySelector('.in-icms-ent-rj')?.value || '',
+        icms_sai_rj: row.querySelector('.in-icms-sai-rj')?.value || ''
       }))
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -1541,8 +1627,11 @@ function loadState() {
         set('.in-custo-sp', r.custo_sp);
         set('.in-ll2-sp', r.ll2_sp);
         set('.in-ll2-rj', r.ll2_rj);
-        set('.in-icms-ent', r.icms_ent);
-        set('.in-icms-sai', r.icms_sai);
+        // Compatibilidade: estados antigos com icms_ent/icms_sai únicos viram ent_sp=ent_rj e sai_sp=sai_rj
+        set('.in-icms-ent-sp', r.icms_ent_sp !== undefined ? r.icms_ent_sp : r.icms_ent);
+        set('.in-icms-sai-sp', r.icms_sai_sp !== undefined ? r.icms_sai_sp : r.icms_sai);
+        set('.in-icms-ent-rj', r.icms_ent_rj !== undefined ? r.icms_ent_rj : r.icms_ent);
+        set('.in-icms-sai-rj', r.icms_sai_rj !== undefined ? r.icms_sai_rj : r.icms_sai);
       });
     }
   } catch (e) { /* ignore */ }
@@ -1572,16 +1661,23 @@ function writeTaxesToForm() {
   if (flbl) flbl.textContent = FREIGHT_RJ.toFixed(2).replace('.', ',');
 }
 function syncRowIcmsFromCadastro() {
-  // Aplica ICMS Entrada do cadastro em TODAS as 3 linhas da categoria.
-  // ICMS Saída do cadastro aplica APENAS na slot 1 (principal); slots 2 e 3
+  // Aplica ICMS Entrada do cadastro nas 4 colunas (entrada SP, entrada RJ)
+  // de TODAS as 3 linhas da categoria.
+  // ICMS Saída do cadastro aplica APENAS na slot 1, em SP e RJ; slots 2 e 3
   // preservam suas próprias seleções para cenários alternativos.
   document.querySelectorAll('#simTable tbody tr').forEach(row => {
     const cat = row.dataset.cat;
     const slot = row.dataset.slot || '1';
-    const ent = row.querySelector('.in-icms-ent');
-    const sai = row.querySelector('.in-icms-sai');
-    if (ent) ent.value = String(ICMS_CAT[cat].cred);
-    if (sai && slot === '1') sai.value = String(ICMS_CAT[cat].deb);
+    const entSP = row.querySelector('.in-icms-ent-sp');
+    const entRJ = row.querySelector('.in-icms-ent-rj');
+    const saiSP = row.querySelector('.in-icms-sai-sp');
+    const saiRJ = row.querySelector('.in-icms-sai-rj');
+    if (entSP) entSP.value = String(ICMS_CAT[cat].cred);
+    if (entRJ) entRJ.value = String(ICMS_CAT[cat].cred);
+    if (slot === '1') {
+      if (saiSP) saiSP.value = String(ICMS_CAT[cat].deb);
+      if (saiRJ) saiRJ.value = String(ICMS_CAT[cat].deb);
+    }
   });
 }
 function saveTaxes() {
@@ -1610,8 +1706,11 @@ function resetRowsToDefaults() {
     if (slot === '1') set('.in-custo-sp', d.custo_sp);
     set('.in-ll2-sp', d.ll2_sp);
     set('.in-ll2-rj', d.ll2_rj);
-    set('.in-icms-ent', d.icms_ent);
-    set('.in-icms-sai', SLOT_DEFAULT_SAI[slot] || d.icms_sai);
+    const saiDefault = SLOT_DEFAULT_SAI[slot] || d.icms_sai;
+    set('.in-icms-ent-sp', d.icms_ent);
+    set('.in-icms-ent-rj', d.icms_ent);
+    set('.in-icms-sai-sp', saiDefault);
+    set('.in-icms-sai-rj', saiDefault);
   });
   recalcAll();
   saveState();
@@ -1697,19 +1796,23 @@ function recalcRow(row) {
   const custoRJCell = primary.querySelector('.custo-rj');
   if (custoRJCell) custoRJCell.textContent = fmt(custoRJ);
 
-  const icmsDeb = parseFloat(row.querySelector('.in-icms-sai').value) || 0;
-  const icmsCred = parseFloat(row.querySelector('.in-icms-ent').value) || 0;
+  // ICMS independentes por lado (SP e RJ podem ter ent/sai diferentes)
+  const icmsEntSP = parseFloat(row.querySelector('.in-icms-ent-sp')?.value) || 0;
+  const icmsSaiSP = parseFloat(row.querySelector('.in-icms-sai-sp')?.value) || 0;
+  const icmsEntRJ = parseFloat(row.querySelector('.in-icms-ent-rj')?.value) || 0;
+  const icmsSaiRJ = parseFloat(row.querySelector('.in-icms-sai-rj')?.value) || 0;
 
-  // LL alvo sempre calculado automaticamente (não editável)
-  const llTarget = getLLTarget(cat, icmsCred, icmsDeb);
+  // LL alvo automático por lado (regra usa entrada e saída do PRÓPRIO lado)
+  const llTargetSP = getLLTarget(cat, icmsEntSP, icmsSaiSP);
+  const llTargetRJ = getLLTarget(cat, icmsEntRJ, icmsSaiRJ);
   const llSPInput = row.querySelector('.in-ll2-sp');
   const llRJInput = row.querySelector('.in-ll2-rj');
-  if (llSPInput) llSPInput.value = llTarget;
-  if (llRJInput) llRJInput.value = llTarget;
+  if (llSPInput) llSPInput.value = llTargetSP;
+  if (llRJInput) llRJInput.value = llTargetRJ;
 
   /* SP */
-  const suggSP = iterateSugg02(custoSP, llTarget, cat, icmsDeb, icmsCred);
-  const sp = calcRow(custoSP, suggSP, cat, icmsDeb, icmsCred);
+  const suggSP = iterateSugg02(custoSP, llTargetSP, cat, icmsSaiSP, icmsEntSP);
+  const sp = calcRow(custoSP, suggSP, cat, icmsSaiSP, icmsEntSP);
   row.querySelector('.sugg2-sp').textContent = fmt(suggSP);
   row.querySelector('.tot-imp-sp').textContent = fmt(sp.tot_imp);
   row.querySelector('.subtot-sp').textContent = fmt(sp.subtot);
@@ -1717,15 +1820,15 @@ function recalcRow(row) {
   row.querySelector('.ll-sp').textContent = fmt(sp.ll, 2) + '%';
 
   /* RJ */
-  const suggRJ = iterateSugg02(custoRJ, llTarget, cat, icmsDeb, icmsCred);
-  const rj = calcRow(custoRJ, suggRJ, cat, icmsDeb, icmsCred);
+  const suggRJ = iterateSugg02(custoRJ, llTargetRJ, cat, icmsSaiRJ, icmsEntRJ);
+  const rj = calcRow(custoRJ, suggRJ, cat, icmsSaiRJ, icmsEntRJ);
   row.querySelector('.sugg2-rj').textContent = fmt(suggRJ);
   row.querySelector('.tot-imp-rj').textContent = fmt(rj.tot_imp);
   row.querySelector('.subtot-rj').textContent = fmt(rj.subtot);
   row.querySelector('.pl-rj').textContent = fmt(rj.pl);
   row.querySelector('.ll-rj').textContent = fmt(rj.ll, 2) + '%';
 
-  return { cat, slot: row.dataset.slot || '1', custoSP, custoRJ, suggSP, suggRJ, ll2SP: llTarget, ll2RJ: llTarget };
+  return { cat, slot: row.dataset.slot || '1', custoSP, custoRJ, suggSP, suggRJ, ll2SP: llTargetSP, ll2RJ: llTargetRJ, icmsEntSP, icmsSaiSP, icmsEntRJ, icmsSaiRJ };
 }
 
 function recalcAll() {
@@ -1900,7 +2003,35 @@ function bindTaxForm() {
 function bindClientInputs() {
   ['client_product','client_manufacturer','client_qty_kg','client_packaging','client_oc','client_lot','client_name','client_cnpj','client_owner','client_ref','client_date','client_notes'].forEach(id => {
     const el = document.getElementById(id);
-    if (el) el.addEventListener('input', saveState);
+    if (el) el.addEventListener('input', () => {
+      saveState();
+      syncQuickFromClient();
+    });
+  });
+}
+
+/* Espelhamento bidirecional entre campos rápidos (aba Simulador) e
+   campos completos (aba Cadastro do Cliente) */
+function syncQuickFromClient() {
+  document.querySelectorAll('#quickFields input[data-mirror]').forEach(qi => {
+    const targetId = qi.dataset.mirror;
+    const src = document.getElementById(targetId);
+    if (src && qi.value !== src.value) qi.value = src.value;
+  });
+}
+function syncClientFromQuick() {
+  document.querySelectorAll('#quickFields input[data-mirror]').forEach(qi => {
+    const targetId = qi.dataset.mirror;
+    const dst = document.getElementById(targetId);
+    if (dst && dst.value !== qi.value) dst.value = qi.value;
+  });
+}
+function bindQuickFields() {
+  document.querySelectorAll('#quickFields input[data-mirror]').forEach(qi => {
+    qi.addEventListener('input', () => {
+      syncClientFromQuick();
+      saveState();
+    });
   });
 }
 
@@ -1926,20 +2057,24 @@ function getVisibleRows() {
 }
 
 function exportCSV() {
-  const rows = [['Categoria','Custo SP','Custo RJ','ICMS Entrada','ICMS Saída','LL alvo SP','Sugg SP','LL real SP','LL alvo RJ','Sugg RJ','LL real RJ']];
-  getVisibleRows().forEach(row => {
+  const rows = [['Categoria','Slot','Custo SP','Custo RJ','ICMS Ent SP','ICMS Sai SP','LL alvo SP','Sugg SP','LL real SP','ICMS Ent RJ','ICMS Sai RJ','LL alvo RJ','Sugg RJ','LL real RJ']];
+  getVisibleRows().filter(r => !r.classList.contains('slot-disabled')).forEach(row => {
     const cat = CAT_LABELS[row.dataset.cat] || row.dataset.cat;
-    const cSP = row.querySelector('.in-custo-sp').value;
-    const cRJ = row.querySelector('.custo-rj').textContent;
-    const ent = row.querySelector('.in-icms-ent').value + '%';
-    const sai = row.querySelector('.in-icms-sai').value + '%';
-    const llSP = row.querySelector('.in-ll2-sp').value;
-    const sugSP = row.querySelector('.sugg2-sp').textContent;
-    const realSP = row.querySelector('.ll-sp').textContent;
-    const llRJ = row.querySelector('.in-ll2-rj').value;
-    const sugRJ = row.querySelector('.sugg2-rj').textContent;
-    const realRJ = row.querySelector('.ll-rj').textContent;
-    rows.push([cat, cSP, cRJ, ent, sai, llSP, sugSP, realSP, llRJ, sugRJ, realRJ]);
+    const slot = row.dataset.slot || '1';
+    const primary = getPrimaryRow(row.dataset.cat) || row;
+    const cSP = primary.querySelector('.in-custo-sp')?.value || '';
+    const cRJ = primary.querySelector('.custo-rj')?.textContent || '';
+    const entSP = (row.querySelector('.in-icms-ent-sp')?.value || '') + '%';
+    const saiSP = (row.querySelector('.in-icms-sai-sp')?.value || '') + '%';
+    const entRJ = (row.querySelector('.in-icms-ent-rj')?.value || '') + '%';
+    const saiRJ = (row.querySelector('.in-icms-sai-rj')?.value || '') + '%';
+    const llSP = row.querySelector('.in-ll2-sp')?.value || '';
+    const sugSP = row.querySelector('.sugg2-sp')?.textContent || '';
+    const realSP = row.querySelector('.ll-sp')?.textContent || '';
+    const llRJ = row.querySelector('.in-ll2-rj')?.value || '';
+    const sugRJ = row.querySelector('.sugg2-rj')?.textContent || '';
+    const realRJ = row.querySelector('.ll-rj')?.textContent || '';
+    rows.push([cat, slot, cSP, cRJ, entSP, saiSP, llSP, sugSP, realSP, entRJ, saiRJ, llRJ, sugRJ, realRJ]);
   });
   const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(';')).join('\n');
   const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
@@ -1964,7 +2099,6 @@ function buildExportSnapshot() {
     box-sizing: border-box;
   `;
 
-  // Determina categoria base (se "all", usa food como default visual)
   const baseCat = (currentCategory === 'all') ? 'food' : currentCategory;
   const slotRows = Array.from(document.querySelectorAll(`#simTable tbody tr[data-cat="${baseCat}"]`))
     .filter(r => !r.classList.contains('slot-disabled'));
@@ -1977,7 +2111,6 @@ function buildExportSnapshot() {
 
   const custoSP = parseFloat(primary.querySelector('.in-custo-sp').value) || 0;
   const custoRJ = custoSP + FREIGHT_RJ;
-  const icmsEnt = parseFloat(primary.querySelector('.in-icms-ent').value) || 0;
 
   const product = (document.getElementById('client_product')?.value || '').trim() || '—';
   const manufacturer = (document.getElementById('client_manufacturer')?.value || '').trim() || '—';
@@ -1988,30 +2121,26 @@ function buildExportSnapshot() {
   const catLabel = CAT_LABELS[baseCat] || baseCat.toUpperCase();
   const today = new Date().toLocaleDateString('pt-BR');
 
-  // Formatador R$
   const brl = (n) => 'R$ ' + (isFinite(n) ? n : 0).toFixed(2).replace('.', ',');
 
-  // Cenários: lê valores já calculados das 3 linhas do simulador
   const scenarioRows = slotRows.map(row => {
-    const icmsSP = parseFloat(row.querySelector('.in-icms-sai').value) || 0;
-    // Como o sistema tem 1 ICMS Saída por linha (compartilhado entre SP e RJ no cálculo),
-    // usamos o mesmo valor para ambas as colunas exibidas no PNG.
+    const icmsEntSP = parseFloat(row.querySelector('.in-icms-ent-sp')?.value) || 0;
+    const icmsSaiSP = parseFloat(row.querySelector('.in-icms-sai-sp')?.value) || 0;
+    const icmsEntRJ = parseFloat(row.querySelector('.in-icms-ent-rj')?.value) || 0;
+    const icmsSaiRJ = parseFloat(row.querySelector('.in-icms-sai-rj')?.value) || 0;
     const sugSP = parseFloat((row.querySelector('.sugg2-sp').textContent || '0').replace(',', '.')) || 0;
     const sugRJ = parseFloat((row.querySelector('.sugg2-rj').textContent || '0').replace(',', '.')) || 0;
-    return { icms_sp: icmsSP, icms_rj: icmsSP, sug_sp: sugSP, sug_rj: sugRJ };
+    return { icms_ent_sp: icmsEntSP, icms_sai_sp: icmsSaiSP, icms_ent_rj: icmsEntRJ, icms_sai_rj: icmsSaiRJ, sug_sp: sugSP, sug_rj: sugRJ };
   });
 
-  // Cor da categoria (segmento)
+  const icmsEntCabecalho = scenarioRows[0]?.icms_ent_sp || 0;
   const catColor = baseCat === 'food' ? '#5b9bd5' : (baseCat === 'cosm' ? '#e8a73c' : '#7fb84a');
 
   wrap.innerHTML = `
     <div style="border:2px solid #000; background:#fff;">
-      <!-- Cabeçalho preto -->
       <div style="background:#000; color:#fff; text-align:center; padding:12px 16px; font-size:18px; font-weight:700; letter-spacing:0.02em; border-bottom:2px solid #000;">
         Segue custo de entrada do seguinte item:
       </div>
-
-      <!-- Linha de cabeçalhos primários -->
       <table style="width:100%; border-collapse:collapse; font-family:'Segoe UI', Arial, sans-serif;">
         <tr>
           <th style="background:#000; color:#fff; padding:10px 8px; font-size:13px; text-align:center; border:1px solid #000; width:20%;">PRODUTO:</th>
@@ -2023,12 +2152,10 @@ function buildExportSnapshot() {
         <tr>
           <td style="padding:18px 8px; text-align:center; font-size:14px; font-weight:700; border:1px solid #000; background:#fff;">${product}</td>
           <td style="padding:18px 8px; text-align:center; font-size:14px; font-weight:700; border:1px solid #000; background:#fff;">${brl(custoSP)}</td>
-          <td style="padding:18px 8px; text-align:center; font-size:14px; font-weight:700; border:1px solid #000; background:#fff;">${icmsEnt}%</td>
+          <td style="padding:18px 8px; text-align:center; font-size:14px; font-weight:700; border:1px solid #000; background:#fff;">${icmsEntCabecalho}%</td>
           <td style="padding:18px 8px; text-align:center; font-size:14px; font-weight:700; border:1px solid #000; background:#fff;">${brl(custoRJ)}</td>
           <td style="padding:18px 8px; text-align:center; font-size:14px; font-weight:700; border:1px solid #000; background:#fff;">${manufacturer}</td>
         </tr>
-
-        <!-- Linha de cabeçalhos secundários -->
         <tr>
           <th style="background:#000; color:#fff; padding:10px 8px; font-size:13px; text-align:center; border:1px solid #000;">COMPRAMOS EM KG:</th>
           <th style="background:#000; color:#fff; padding:10px 8px; font-size:13px; text-align:center; border:1px solid #000;">EMBALAGEM:</th>
@@ -2043,28 +2170,22 @@ function buildExportSnapshot() {
           <td style="padding:18px 8px; text-align:center; font-size:13px; font-weight:700; border:1px solid #000; background:#fff;">${lot}</td>
           <td style="padding:18px 8px; text-align:center; font-size:14px; font-weight:700; border:1px solid #000; background:${catColor}; color:#fff;">${catLabel}</td>
         </tr>
-
-        <!-- Cabeçalhos da tabela de cenários -->
         <tr>
           <th style="background:#f4a261; color:#000; padding:8px; font-size:13px; text-align:center; border:1px solid #000; font-weight:700;">ICMS:</th>
           <th style="background:#f4a261; color:#000; padding:8px; font-size:13px; text-align:center; border:1px solid #000; font-weight:700;" colspan="2">BRONZE EM SP:</th>
           <th style="background:#f4a261; color:#000; padding:8px; font-size:13px; text-align:center; border:1px solid #000; font-weight:700;">ICMS:</th>
           <th style="background:#f4a261; color:#000; padding:8px; font-size:13px; text-align:center; border:1px solid #000; font-weight:700;">BRONZE NO RJ:</th>
         </tr>
-
-        <!-- Linhas de cenários -->
         ${scenarioRows.map(s => `
           <tr>
-            <td style="background:#fff; padding:10px 8px; text-align:center; font-size:14px; font-weight:700; border:1px solid #000;">${s.icms_sp}%</td>
+            <td style="background:#fff; padding:10px 8px; text-align:center; font-size:14px; font-weight:700; border:1px solid #000;">${s.icms_sai_sp}%</td>
             <td style="background:#fff700; padding:10px 8px; text-align:center; font-size:14px; font-weight:700; border:1px solid #000; color:#c00;" colspan="2">${brl(s.sug_sp)}</td>
-            <td style="background:#fff; padding:10px 8px; text-align:center; font-size:14px; font-weight:700; border:1px solid #000;">${s.icms_rj}%</td>
+            <td style="background:#fff; padding:10px 8px; text-align:center; font-size:14px; font-weight:700; border:1px solid #000;">${s.icms_sai_rj}%</td>
             <td style="background:#fff700; padding:10px 8px; text-align:center; font-size:14px; font-weight:700; border:1px solid #000; color:#c00;">${brl(s.sug_rj)}</td>
           </tr>
         `).join('')}
       </table>
     </div>
-
-    <!-- Rodapé discreto -->
     <div style="margin-top:8px; padding:6px 4px; display:flex; justify-content:space-between; font-size:9px; color:#94a3b8; font-family:'Segoe UI', Arial, sans-serif;">
       <span>OXQUIM · Simulador de Preços · Lucro Real</span>
       <span>Emitido em ${today}</span>
@@ -2085,57 +2206,41 @@ function buildExportFilename(ext) {
 }
 
 async function exportPNG() {
-  if (typeof html2canvas === 'undefined') {
-    showToast('Biblioteca de imagem não carregada — verifique sua conexão', 'error');
-    return;
-  }
   const snap = buildExportSnapshot();
-  showToast('Gerando imagem...', 'success');
   try {
-    const canvas = await html2canvas(snap, { scale: 2, backgroundColor: '#ffffff', useCORS: true });
-    const url = canvas.toDataURL('image/png');
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = buildExportFilename('png');
-    a.click();
-    showToast('Imagem PNG salva', 'success');
+    const canvas = await html2canvas(snap, { scale: 2, backgroundColor: '#ffffff', logging: false });
+    canvas.toBlob(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = buildExportFilename('png');
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('PNG exportado', 'success');
+    }, 'image/png');
   } catch (e) {
-    console.error(e);
-    showToast('Erro ao gerar imagem: ' + e.message, 'error');
+    showToast('Erro ao gerar PNG: ' + e.message, 'error');
   } finally {
     snap.remove();
   }
 }
 
 async function exportPDF() {
-  if (typeof html2canvas === 'undefined' || !window.jspdf) {
-    showToast('Biblioteca de PDF não carregada — verifique sua conexão', 'error');
-    return;
-  }
   const snap = buildExportSnapshot();
-  showToast('Gerando PDF...', 'success');
   try {
-    const canvas = await html2canvas(snap, { scale: 2, backgroundColor: '#ffffff', useCORS: true });
+    const canvas = await html2canvas(snap, { scale: 2, backgroundColor: '#ffffff', logging: false });
     const imgData = canvas.toDataURL('image/png');
     const { jsPDF } = window.jspdf;
-    // A4 paisagem em mm: 297 x 210
     const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
-    const pageW = pdf.internal.pageSize.getWidth();
-    const pageH = pdf.internal.pageSize.getHeight();
-    const margin = 8;
-    const maxW = pageW - margin * 2;
-    const maxH = pageH - margin * 2;
-    // Ajusta proporcionalmente
-    const ratio = canvas.width / canvas.height;
-    let w = maxW, h = maxW / ratio;
-    if (h > maxH) { h = maxH; w = maxH * ratio; }
-    const x = (pageW - w) / 2;
-    const y = (pageH - h) / 2;
-    pdf.addImage(imgData, 'PNG', x, y, w, h);
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const imgWidth = pageWidth - 20;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    const y = Math.max(10, (pageHeight - imgHeight) / 2);
+    pdf.addImage(imgData, 'PNG', 10, y, imgWidth, Math.min(imgHeight, pageHeight - 20));
     pdf.save(buildExportFilename('pdf'));
-    showToast('PDF salvo', 'success');
+    showToast('PDF exportado', 'success');
   } catch (e) {
-    console.error(e);
     showToast('Erro ao gerar PDF: ' + e.message, 'error');
   } finally {
     snap.remove();
@@ -2151,6 +2256,8 @@ function init() {
   bindTabs();
   bindTaxForm();
   bindClientInputs();
+  bindQuickFields();
+  syncQuickFromClient();
   bindCatFilter();
   bindSlotControl();
   applySlotFilter();
