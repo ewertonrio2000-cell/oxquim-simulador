@@ -843,7 +843,86 @@ table.sim select.icms-ent {
   color: #fff;
   border-color: var(--brand-900);
 }
-table.sim tbody tr.row-hidden { display: none; }
+
+/* Slot control (checkboxes para ativar/desativar linhas) */
+.slot-control {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  background: #f3f7fb;
+  border: 1px solid #d4dde8;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+}
+.slot-control-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #64748b;
+  flex-shrink: 0;
+}
+.slot-control-groups {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.slot-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 10px 4px 4px;
+  background: #fff;
+  border: 1px solid #e1e8f0;
+  border-radius: 6px;
+}
+.slot-group-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+.tag-food { background: #1c5285; }
+.tag-cosm { background: #b45309; }
+.tag-feed { background: #166534; }
+.slot-chk {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #0a2540;
+  cursor: pointer;
+  user-select: none;
+}
+.slot-chk input[type="checkbox"] {
+  cursor: pointer;
+  width: 14px;
+  height: 14px;
+  accent-color: #0a2540;
+}
+.slot-chk input[type="checkbox"]:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.slot-chk input[type="checkbox"]:disabled + * { opacity: 0.6; }
+
+table.sim tbody tr.row-hidden,
+table.sim tbody tr.slot-disabled { display: none; }
+/* Separador visual entre grupos de categoria (3 linhas por categoria) */
+table.sim tbody tr.slot-last td {
+  border-bottom: 3px solid var(--brand-900) !important;
+}
+table.sim tbody tr.slot-first td.label {
+  vertical-align: middle;
+}
+table.sim tbody tr[data-slot="2"] td:first-child,
+table.sim tbody tr[data-slot="3"] td:first-child {
+  border-left: 3px solid var(--brand-900);
+}
 
 /* ========= PRINT ========= */
 @media print {
@@ -922,6 +1001,12 @@ table.sim tbody tr.row-hidden { display: none; }
       <h2><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span> Dados do Cliente / Operação</h2>
       <p class="card-desc">Informações que aparecem no relatório impresso. Preenchimento opcional.</p>
       <div class="client-info">
+        <div class="field"><label>Produto</label><input id="client_product" type="text" placeholder="Ex.: MANIMALTO 20"></div>
+        <div class="field"><label>Fabricante</label><input id="client_manufacturer" type="text" placeholder="Ex.: INDEMIL"></div>
+        <div class="field"><label>Compramos em KG</label><input id="client_qty_kg" type="text" placeholder="Ex.: 11000 KG"></div>
+        <div class="field"><label>Embalagem</label><input id="client_packaging" type="text" placeholder="Ex.: SACOS DE 25 KG"></div>
+        <div class="field"><label>OC</label><input id="client_oc" type="text" placeholder="Ex.: 1875 / 1898"></div>
+        <div class="field"><label>Lote</label><input id="client_lot" type="text" placeholder="Ex.: GD1114 / GD1115 / GD1519"></div>
         <div class="field"><label>Nome da empresa / cliente</label><input id="client_name" type="text" placeholder="Ex.: Química XYZ Ltda."></div>
         <div class="field"><label>CNPJ</label><input id="client_cnpj" type="text" placeholder="00.000.000/0000-00"></div>
         <div class="field"><label>Responsável</label><input id="client_owner" type="text" placeholder="Nome do comprador / vendedor"></div>
@@ -1063,7 +1148,7 @@ table.sim tbody tr.row-hidden { display: none; }
             <span>PIS Crédito <b>1,65%</b></span>
             <span>COFINS Crédito <b>7,60%</b></span>
             <span>CSLL/IR <b>1,00%</b></span>
-            <span>Despesa Operacional <b>7,60%</b></span>
+            <span>Despesa Operacional <b>3,80%</b></span>
             <span>Corretor <b>0,00%</b></span>
             <span>Mark-up padrão <b>1,171</b></span>
           </div>
@@ -1109,6 +1194,31 @@ table.sim tbody tr.row-hidden { display: none; }
         <button class="cat-filter-btn" data-cat="all">TODAS</button>
       </div>
 
+      <!-- Controle de linhas ativas por categoria -->
+      <div class="slot-control" id="slotControl">
+        <span class="slot-control-label">Linhas ativas:</span>
+        <div class="slot-control-groups">
+          <div class="slot-group" data-cat="food">
+            <span class="slot-group-tag tag-food">FOOD</span>
+            <label class="slot-chk"><input type="checkbox" data-cat="food" data-slot="1" checked disabled> Linha 1</label>
+            <label class="slot-chk"><input type="checkbox" data-cat="food" data-slot="2" checked> Linha 2</label>
+            <label class="slot-chk"><input type="checkbox" data-cat="food" data-slot="3" checked> Linha 3</label>
+          </div>
+          <div class="slot-group" data-cat="cosm">
+            <span class="slot-group-tag tag-cosm">COSM</span>
+            <label class="slot-chk"><input type="checkbox" data-cat="cosm" data-slot="1" checked disabled> Linha 1</label>
+            <label class="slot-chk"><input type="checkbox" data-cat="cosm" data-slot="2" checked> Linha 2</label>
+            <label class="slot-chk"><input type="checkbox" data-cat="cosm" data-slot="3" checked> Linha 3</label>
+          </div>
+          <div class="slot-group" data-cat="feed">
+            <span class="slot-group-tag tag-feed">FEED</span>
+            <label class="slot-chk"><input type="checkbox" data-cat="feed" data-slot="1" checked disabled> Linha 1</label>
+            <label class="slot-chk"><input type="checkbox" data-cat="feed" data-slot="2" checked> Linha 2</label>
+            <label class="slot-chk"><input type="checkbox" data-cat="feed" data-slot="3" checked> Linha 3</label>
+          </div>
+        </div>
+      </div>
+
       <div class="sim-table-wrapper">
         <table class="sim" id="simTable">
           <thead>
@@ -1138,53 +1248,154 @@ table.sim tbody tr.row-hidden { display: none; }
             </tr>
           </thead>
           <tbody>
-            <tr data-cat="food">
-              <td class="label"><span class="category-badge cat-badge-food">FOOD</span></td>
-              <td class="input-cell"><input type="number" step="0.01" class="in-custo-sp" value="14.95"></td>
-              <td class="rj-custo custo-rj">15,16</td>
-              <td class="calc-sp markup-cell">1,171</td>
-              <td><select class="icms-ent in-icms-ent"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option><option value="22" selected>22%</option></select></td>
-              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
-              <td class="sugg-sp sugg2-sp"></td>
-              <td class="calc-sp tot-imp-sp"></td>
-              <td class="calc-sp subtot-sp"></td>
-              <td class="calc-sp pl-sp"></td>
-              <td class="calc-ll-sp ll-sp"></td>
-              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
-              <td class="sugg-rj sugg2-rj"></td>
-              <td class="calc-rj tot-imp-rj"></td>
-              <td class="calc-rj subtot-rj"></td>
-              <td class="calc-rj pl-rj"></td>
-              <td class="calc-ll-rj ll-rj"></td>
-            </tr>
-            <tr data-cat="cosm">
-              <td class="label"><span class="category-badge cat-badge-cosm">COSMÉTICOS</span></td>
-              <td class="input-cell"><input type="number" step="0.01" class="in-custo-sp" value="14.95"></td>
-              <td class="rj-custo custo-rj">15,16</td>
-              <td class="calc-sp markup-cell">1,171</td>
-              <td><select class="icms-ent in-icms-ent"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option><option value="22" selected>22%</option></select></td>
-              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
-              <td class="sugg-sp sugg2-sp"></td>
-              <td class="calc-sp tot-imp-sp"></td>
-              <td class="calc-sp subtot-sp"></td>
-              <td class="calc-sp pl-sp"></td>
-              <td class="calc-ll-sp ll-sp"></td>
-              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
-              <td class="sugg-rj sugg2-rj"></td>
-              <td class="calc-rj tot-imp-rj"></td>
-              <td class="calc-rj subtot-rj"></td>
-              <td class="calc-rj pl-rj"></td>
-              <td class="calc-ll-rj ll-rj"></td>
-            </tr>
-            <tr data-cat="feed">
-              <td class="label"><span class="category-badge cat-badge-feed">FEED</span></td>
-              <td class="input-cell"><input type="number" step="0.01" class="in-custo-sp" value="96.38"></td>
-              <td class="rj-custo custo-rj">96,59</td>
-              <td class="calc-sp markup-cell">1,171</td>
+            <!-- ===================== FOOD ===================== -->
+            <tr data-cat="food" data-slot="1" class="slot-first">
+              <td class="label" rowspan="3"><span class="category-badge cat-badge-food">FOOD</span></td>
+              <td class="input-cell" rowspan="3"><input type="number" step="0.01" class="in-custo-sp" value="14.95"></td>
+              <td class="rj-custo custo-rj" rowspan="3">15,16</td>
+              <td class="calc-sp markup-cell" rowspan="3">1,171</td>
               <td><select class="icms-ent in-icms-ent"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
               <td><select class="icms-sel in-icms-sai"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
+              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
+              <td class="sugg-sp sugg2-sp"></td>
+              <td class="calc-sp tot-imp-sp"></td>
+              <td class="calc-sp subtot-sp"></td>
+              <td class="calc-sp pl-sp"></td>
+              <td class="calc-ll-sp ll-sp"></td>
+              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
+              <td class="sugg-rj sugg2-rj"></td>
+              <td class="calc-rj tot-imp-rj"></td>
+              <td class="calc-rj subtot-rj"></td>
+              <td class="calc-rj pl-rj"></td>
+              <td class="calc-ll-rj ll-rj"></td>
+            </tr>
+            <tr data-cat="food" data-slot="2">
+              <td><select class="icms-ent in-icms-ent"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
+              <td><select class="icms-sel in-icms-sai"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
+              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
+              <td class="sugg-sp sugg2-sp"></td>
+              <td class="calc-sp tot-imp-sp"></td>
+              <td class="calc-sp subtot-sp"></td>
+              <td class="calc-sp pl-sp"></td>
+              <td class="calc-ll-sp ll-sp"></td>
+              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
+              <td class="sugg-rj sugg2-rj"></td>
+              <td class="calc-rj tot-imp-rj"></td>
+              <td class="calc-rj subtot-rj"></td>
+              <td class="calc-rj pl-rj"></td>
+              <td class="calc-ll-rj ll-rj"></td>
+            </tr>
+            <tr data-cat="food" data-slot="3" class="slot-last">
+              <td><select class="icms-ent in-icms-ent"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
+              <td><select class="icms-sel in-icms-sai"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="18" selected>18%</option><option value="22">22%</option></select></td>
+              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
+              <td class="sugg-sp sugg2-sp"></td>
+              <td class="calc-sp tot-imp-sp"></td>
+              <td class="calc-sp subtot-sp"></td>
+              <td class="calc-sp pl-sp"></td>
+              <td class="calc-ll-sp ll-sp"></td>
+              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
+              <td class="sugg-rj sugg2-rj"></td>
+              <td class="calc-rj tot-imp-rj"></td>
+              <td class="calc-rj subtot-rj"></td>
+              <td class="calc-rj pl-rj"></td>
+              <td class="calc-ll-rj ll-rj"></td>
+            </tr>
+
+            <!-- ===================== COSMÉTICOS ===================== -->
+            <tr data-cat="cosm" data-slot="1" class="slot-first">
+              <td class="label" rowspan="3"><span class="category-badge cat-badge-cosm">COSMÉTICOS</span></td>
+              <td class="input-cell" rowspan="3"><input type="number" step="0.01" class="in-custo-sp" value="14.95"></td>
+              <td class="rj-custo custo-rj" rowspan="3">15,16</td>
+              <td class="calc-sp markup-cell" rowspan="3">1,171</td>
+              <td><select class="icms-ent in-icms-ent"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
+              <td><select class="icms-sel in-icms-sai"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
+              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
+              <td class="sugg-sp sugg2-sp"></td>
+              <td class="calc-sp tot-imp-sp"></td>
+              <td class="calc-sp subtot-sp"></td>
+              <td class="calc-sp pl-sp"></td>
+              <td class="calc-ll-sp ll-sp"></td>
+              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
+              <td class="sugg-rj sugg2-rj"></td>
+              <td class="calc-rj tot-imp-rj"></td>
+              <td class="calc-rj subtot-rj"></td>
+              <td class="calc-rj pl-rj"></td>
+              <td class="calc-ll-rj ll-rj"></td>
+            </tr>
+            <tr data-cat="cosm" data-slot="2">
+              <td><select class="icms-ent in-icms-ent"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
+              <td><select class="icms-sel in-icms-sai"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
+              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
+              <td class="sugg-sp sugg2-sp"></td>
+              <td class="calc-sp tot-imp-sp"></td>
+              <td class="calc-sp subtot-sp"></td>
+              <td class="calc-sp pl-sp"></td>
+              <td class="calc-ll-sp ll-sp"></td>
+              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
+              <td class="sugg-rj sugg2-rj"></td>
+              <td class="calc-rj tot-imp-rj"></td>
+              <td class="calc-rj subtot-rj"></td>
+              <td class="calc-rj pl-rj"></td>
+              <td class="calc-ll-rj ll-rj"></td>
+            </tr>
+            <tr data-cat="cosm" data-slot="3" class="slot-last">
+              <td><select class="icms-ent in-icms-ent"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
+              <td><select class="icms-sel in-icms-sai"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="18" selected>18%</option><option value="22">22%</option></select></td>
+              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
+              <td class="sugg-sp sugg2-sp"></td>
+              <td class="calc-sp tot-imp-sp"></td>
+              <td class="calc-sp subtot-sp"></td>
+              <td class="calc-sp pl-sp"></td>
+              <td class="calc-ll-sp ll-sp"></td>
+              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
+              <td class="sugg-rj sugg2-rj"></td>
+              <td class="calc-rj tot-imp-rj"></td>
+              <td class="calc-rj subtot-rj"></td>
+              <td class="calc-rj pl-rj"></td>
+              <td class="calc-ll-rj ll-rj"></td>
+            </tr>
+
+            <!-- ===================== FEED ===================== -->
+            <tr data-cat="feed" data-slot="1" class="slot-first">
+              <td class="label" rowspan="3"><span class="category-badge cat-badge-feed">FEED</span></td>
+              <td class="input-cell" rowspan="3"><input type="number" step="0.01" class="in-custo-sp" value="96.38"></td>
+              <td class="rj-custo custo-rj" rowspan="3">96,59</td>
+              <td class="calc-sp markup-cell" rowspan="3">1,171</td>
+              <td><select class="icms-ent in-icms-ent"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
+              <td><select class="icms-sel in-icms-sai"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
+              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
+              <td class="sugg-sp sugg2-sp"></td>
+              <td class="calc-sp tot-imp-sp"></td>
+              <td class="calc-sp subtot-sp"></td>
+              <td class="calc-sp pl-sp"></td>
+              <td class="calc-ll-sp ll-sp"></td>
+              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
+              <td class="sugg-rj sugg2-rj"></td>
+              <td class="calc-rj tot-imp-rj"></td>
+              <td class="calc-rj subtot-rj"></td>
+              <td class="calc-rj pl-rj"></td>
+              <td class="calc-ll-rj ll-rj"></td>
+            </tr>
+            <tr data-cat="feed" data-slot="2">
+              <td><select class="icms-ent in-icms-ent"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
+              <td><select class="icms-sel in-icms-sai"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
+              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
+              <td class="sugg-sp sugg2-sp"></td>
+              <td class="calc-sp tot-imp-sp"></td>
+              <td class="calc-sp subtot-sp"></td>
+              <td class="calc-sp pl-sp"></td>
+              <td class="calc-ll-sp ll-sp"></td>
+              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
+              <td class="sugg-rj sugg2-rj"></td>
+              <td class="calc-rj tot-imp-rj"></td>
+              <td class="calc-rj subtot-rj"></td>
+              <td class="calc-rj pl-rj"></td>
+              <td class="calc-ll-rj ll-rj"></td>
+            </tr>
+            <tr data-cat="feed" data-slot="3" class="slot-last">
+              <td><select class="icms-ent in-icms-ent"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
+              <td><select class="icms-sel in-icms-sai"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="18" selected>18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
               <td class="sugg-sp sugg2-sp"></td>
               <td class="calc-sp tot-imp-sp"></td>
@@ -1248,7 +1459,7 @@ const STORAGE_KEY = 'simulador_precos_v2';
 const FIXED = {
   food: { pis_deb:1.65, cofins_deb:7.6, pis_cred:1.65, cofins_cred:7.6, csll:1, do:7.6, corretor:0, markup:1.171 },
   cosm: { pis_deb:1.65, cofins_deb:7.6, pis_cred:1.65, cofins_cred:7.6, csll:1, do:3.8, corretor:0, markup:1.171 },
-  feed: { pis_deb:1.65, cofins_deb:7.6, pis_cred:1.65, cofins_cred:7.6, csll:1, do:7.6, corretor:0, markup:1.171 }
+  feed: { pis_deb:1.65, cofins_deb:7.6, pis_cred:1.65, cofins_cred:7.6, csll:1, do:3.8, corretor:0, markup:1.171 }
 };
 
 const ICMS_DEFAULTS = {
@@ -1273,6 +1484,12 @@ function saveState() {
     const state = {
       ICMS_CAT, FREIGHT_RJ,
       client: {
+        product: document.getElementById('client_product')?.value || '',
+        manufacturer: document.getElementById('client_manufacturer')?.value || '',
+        qty_kg: document.getElementById('client_qty_kg')?.value || '',
+        packaging: document.getElementById('client_packaging')?.value || '',
+        oc: document.getElementById('client_oc')?.value || '',
+        lot: document.getElementById('client_lot')?.value || '',
         name: document.getElementById('client_name').value,
         cnpj: document.getElementById('client_cnpj').value,
         owner: document.getElementById('client_owner').value,
@@ -1282,11 +1499,12 @@ function saveState() {
       },
       rows: Array.from(document.querySelectorAll('#simTable tbody tr')).map(row => ({
         cat: row.dataset.cat,
-        custo_sp: row.querySelector('.in-custo-sp').value,
-        ll2_sp: row.querySelector('.in-ll2-sp').value,
-        ll2_rj: row.querySelector('.in-ll2-rj').value,
-        icms_ent: row.querySelector('.in-icms-ent').value,
-        icms_sai: row.querySelector('.in-icms-sai').value
+        slot: row.dataset.slot || '1',
+        custo_sp: row.querySelector('.in-custo-sp')?.value || '',
+        ll2_sp: row.querySelector('.in-ll2-sp')?.value || '',
+        ll2_rj: row.querySelector('.in-ll2-rj')?.value || '',
+        icms_ent: row.querySelector('.in-icms-ent')?.value || '',
+        icms_sai: row.querySelector('.in-icms-sai')?.value || ''
       }))
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -1300,22 +1518,31 @@ function loadState() {
     if (state.ICMS_CAT) ICMS_CAT = state.ICMS_CAT;
     if (typeof state.FREIGHT_RJ === 'number') FREIGHT_RJ = state.FREIGHT_RJ;
     if (state.client) {
-      document.getElementById('client_name').value = state.client.name || '';
-      document.getElementById('client_cnpj').value = state.client.cnpj || '';
-      document.getElementById('client_owner').value = state.client.owner || '';
-      document.getElementById('client_ref').value = state.client.ref || '';
-      document.getElementById('client_date').value = state.client.date || '';
-      document.getElementById('client_notes').value = state.client.notes || '';
+      const sv = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+      sv('client_product', state.client.product);
+      sv('client_manufacturer', state.client.manufacturer);
+      sv('client_qty_kg', state.client.qty_kg);
+      sv('client_packaging', state.client.packaging);
+      sv('client_oc', state.client.oc);
+      sv('client_lot', state.client.lot);
+      sv('client_name', state.client.name);
+      sv('client_cnpj', state.client.cnpj);
+      sv('client_owner', state.client.owner);
+      sv('client_ref', state.client.ref);
+      sv('client_date', state.client.date);
+      sv('client_notes', state.client.notes);
     }
     if (Array.isArray(state.rows)) {
       state.rows.forEach(r => {
-        const row = document.querySelector(`#simTable tbody tr[data-cat="${r.cat}"]`);
+        const slot = r.slot || '1';
+        const row = document.querySelector(`#simTable tbody tr[data-cat="${r.cat}"][data-slot="${slot}"]`);
         if (!row) return;
-        row.querySelector('.in-custo-sp').value = r.custo_sp;
-        row.querySelector('.in-ll2-sp').value = r.ll2_sp;
-        row.querySelector('.in-ll2-rj').value = r.ll2_rj;
-        row.querySelector('.in-icms-ent').value = r.icms_ent;
-        row.querySelector('.in-icms-sai').value = r.icms_sai;
+        const set = (sel, val) => { const el = row.querySelector(sel); if (el && val !== '' && val !== undefined) el.value = val; };
+        set('.in-custo-sp', r.custo_sp);
+        set('.in-ll2-sp', r.ll2_sp);
+        set('.in-ll2-rj', r.ll2_rj);
+        set('.in-icms-ent', r.icms_ent);
+        set('.in-icms-sai', r.icms_sai);
       });
     }
   } catch (e) { /* ignore */ }
@@ -1345,12 +1572,16 @@ function writeTaxesToForm() {
   if (flbl) flbl.textContent = FREIGHT_RJ.toFixed(2).replace('.', ',');
 }
 function syncRowIcmsFromCadastro() {
+  // Aplica ICMS Entrada do cadastro em TODAS as 3 linhas da categoria.
+  // ICMS Saída do cadastro aplica APENAS na slot 1 (principal); slots 2 e 3
+  // preservam suas próprias seleções para cenários alternativos.
   document.querySelectorAll('#simTable tbody tr').forEach(row => {
     const cat = row.dataset.cat;
+    const slot = row.dataset.slot || '1';
     const ent = row.querySelector('.in-icms-ent');
     const sai = row.querySelector('.in-icms-sai');
     if (ent) ent.value = String(ICMS_CAT[cat].cred);
-    if (sai) sai.value = String(ICMS_CAT[cat].deb);
+    if (sai && slot === '1') sai.value = String(ICMS_CAT[cat].deb);
   });
 }
 function saveTaxes() {
@@ -1369,14 +1600,18 @@ function resetTaxes() {
   saveState();
   showToast('Padrões restaurados', 'success');
 }
+// ICMS saída padrão por slot ao restaurar (12/7/18 nas 3 linhas)
+const SLOT_DEFAULT_SAI = { '1': 12, '2': 7, '3': 18 };
 function resetRowsToDefaults() {
   document.querySelectorAll('#simTable tbody tr').forEach(row => {
     const d = ROW_DEFAULTS[row.dataset.cat];
-    row.querySelector('.in-custo-sp').value = d.custo_sp;
-    row.querySelector('.in-ll2-sp').value = d.ll2_sp;
-    row.querySelector('.in-ll2-rj').value = d.ll2_rj;
-    row.querySelector('.in-icms-ent').value = d.icms_ent;
-    row.querySelector('.in-icms-sai').value = d.icms_sai;
+    const slot = row.dataset.slot || '1';
+    const set = (sel, val) => { const el = row.querySelector(sel); if (el) el.value = val; };
+    if (slot === '1') set('.in-custo-sp', d.custo_sp);
+    set('.in-ll2-sp', d.ll2_sp);
+    set('.in-ll2-rj', d.ll2_rj);
+    set('.in-icms-ent', d.icms_ent);
+    set('.in-icms-sai', SLOT_DEFAULT_SAI[slot] || d.icms_sai);
   });
   recalcAll();
   saveState();
@@ -1448,11 +1683,19 @@ function iterateSugg02(custo, ll2Target, cat, icmsDebPct, icmsCredPct) {
   return D;
 }
 
+// Retorna a linha "primária" (slot 1) da categoria, que detém Custo SP / RJ via rowspan
+function getPrimaryRow(cat) {
+  return document.querySelector(`#simTable tbody tr[data-cat="${cat}"][data-slot="1"]`);
+}
+
 function recalcRow(row) {
   const cat = row.dataset.cat;
-  const custoSP = parseFloat(row.querySelector('.in-custo-sp').value) || 0;
+  const primary = getPrimaryRow(cat) || row;
+  const custoInput = primary.querySelector('.in-custo-sp');
+  const custoSP = parseFloat(custoInput?.value) || 0;
   const custoRJ = custoSP + FREIGHT_RJ;
-  row.querySelector('.custo-rj').textContent = fmt(custoRJ);
+  const custoRJCell = primary.querySelector('.custo-rj');
+  if (custoRJCell) custoRJCell.textContent = fmt(custoRJ);
 
   const icmsDeb = parseFloat(row.querySelector('.in-icms-sai').value) || 0;
   const icmsCred = parseFloat(row.querySelector('.in-icms-ent').value) || 0;
@@ -1482,7 +1725,7 @@ function recalcRow(row) {
   row.querySelector('.pl-rj').textContent = fmt(rj.pl);
   row.querySelector('.ll-rj').textContent = fmt(rj.ll, 2) + '%';
 
-  return { cat, custoSP, custoRJ, suggSP, suggRJ, ll2SP: llTarget, ll2RJ: llTarget };
+  return { cat, slot: row.dataset.slot || '1', custoSP, custoRJ, suggSP, suggRJ, ll2SP: llTarget, ll2RJ: llTarget };
 }
 
 function recalcAll() {
@@ -1496,19 +1739,21 @@ function recalcAll() {
 function updateSummary(rows) {
   const strip = document.getElementById('summaryStrip');
   if (!strip) return;
-  const visibleRows = (currentCategory === 'all') ? rows : rows.filter(r => r.cat === currentCategory);
+  // Mostra apenas a slot 1 (linha principal) de cada categoria visível
+  let visibleRows = rows.filter(r => r.slot === '1' || r.slot === 1 || !r.slot);
+  if (currentCategory !== 'all') visibleRows = visibleRows.filter(r => r.cat === currentCategory);
   const html = visibleRows.map(r => {
     const label = CAT_LABELS[r.cat] || r.cat.toUpperCase();
     return `
       <div class="kpi kpi-sp">
         <div class="kpi-label">${label} · SP</div>
         <div class="kpi-value">R$ ${fmt(r.suggSP)}</div>
-        <div class="kpi-sub">LL alvo ${fmt(r.ll2SP, 0)}%</div>
+        <div class="kpi-sub">LL alvo ${fmt(r.ll2SP, 2)}%</div>
       </div>
       <div class="kpi kpi-rj">
         <div class="kpi-label">${label} · RJ</div>
         <div class="kpi-value">R$ ${fmt(r.suggRJ)}</div>
-        <div class="kpi-sub">LL alvo ${fmt(r.ll2RJ, 0)}%</div>
+        <div class="kpi-sub">LL alvo ${fmt(r.ll2RJ, 2)}%</div>
       </div>`;
   }).join('');
   strip.innerHTML = html;
@@ -1530,6 +1775,84 @@ function applyCatFilter(cat) {
 function bindCatFilter() {
   document.querySelectorAll('.cat-filter-btn').forEach(btn => {
     btn.addEventListener('click', () => applyCatFilter(btn.dataset.cat));
+  });
+}
+
+/* ========= SLOT (LINHAS) CONTROL =========
+ * Cada categoria tem 3 linhas (slots). Slot 1 é sempre obrigatório.
+ * Slots 2 e 3 podem ser desligados por checkbox — quando desligado:
+ *  - A <tr> ganha a classe slot-disabled (escondida via CSS)
+ *  - O rowspan das células com label/custo/markup é recalculado para
+ *    corresponder ao número de slots ativos (1, 2 ou 3).
+ *  - O snapshot do PNG ignora os slots desativados.
+ * Estado persistido em localStorage para sobreviver reload.
+ */
+const SLOT_STATE_KEY = 'oxquim_slot_state_v1';
+function getSlotState() {
+  try {
+    const raw = localStorage.getItem(SLOT_STATE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  // Default: todos ativos
+  return {
+    food: { '1': true, '2': true, '3': true },
+    cosm: { '1': true, '2': true, '3': true },
+    feed: { '1': true, '2': true, '3': true }
+  };
+}
+function saveSlotState(state) {
+  try { localStorage.setItem(SLOT_STATE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+function isSlotActive(cat, slot) {
+  if (String(slot) === '1') return true; // slot 1 sempre ativo
+  const st = getSlotState();
+  return !!(st[cat] && st[cat][String(slot)]);
+}
+function recalcRowspans() {
+  // Para cada categoria, conta slots ativos e define rowspan nas células da linha 1 (label/custo/etc.)
+  ['food','cosm','feed'].forEach(cat => {
+    const activeCount = ['1','2','3'].filter(s => isSlotActive(cat, s)).length;
+    const primary = document.querySelector(`#simTable tbody tr[data-cat="${cat}"][data-slot="1"]`);
+    if (!primary) return;
+    primary.querySelectorAll('td[rowspan]').forEach(td => {
+      td.setAttribute('rowspan', String(Math.max(1, activeCount)));
+    });
+  });
+}
+function applySlotFilter() {
+  const st = getSlotState();
+  document.querySelectorAll('#simTable tbody tr').forEach(row => {
+    const cat = row.dataset.cat;
+    const slot = row.dataset.slot || '1';
+    const active = (slot === '1') || !!(st[cat] && st[cat][slot]);
+    row.classList.toggle('slot-disabled', !active);
+    // Atualiza classe "slot-last" para a última linha ATIVA receber o border-bottom mais grosso
+    row.classList.remove('slot-last');
+  });
+  // Adiciona slot-last na última linha ativa de cada categoria
+  ['food','cosm','feed'].forEach(cat => {
+    const activeRows = Array.from(document.querySelectorAll(`#simTable tbody tr[data-cat="${cat}"]`))
+      .filter(r => !r.classList.contains('slot-disabled'));
+    if (activeRows.length) activeRows[activeRows.length - 1].classList.add('slot-last');
+  });
+  recalcRowspans();
+  recalcAll();
+}
+function bindSlotControl() {
+  // Inicializa checkboxes a partir do estado salvo
+  const st = getSlotState();
+  document.querySelectorAll('#slotControl input[type="checkbox"]').forEach(chk => {
+    const cat = chk.dataset.cat;
+    const slot = chk.dataset.slot;
+    if (slot === '1') return; // sempre marcado, disabled
+    if (st[cat] && st[cat][slot] !== undefined) chk.checked = !!st[cat][slot];
+    chk.addEventListener('change', () => {
+      const cur = getSlotState();
+      cur[cat] = cur[cat] || { '1': true, '2': true, '3': true };
+      cur[cat][slot] = chk.checked;
+      saveSlotState(cur);
+      applySlotFilter();
+    });
   });
 }
 
@@ -1575,7 +1898,7 @@ function bindTaxForm() {
 }
 
 function bindClientInputs() {
-  ['client_name','client_cnpj','client_owner','client_ref','client_date','client_notes'].forEach(id => {
+  ['client_product','client_manufacturer','client_qty_kg','client_packaging','client_oc','client_lot','client_name','client_cnpj','client_owner','client_ref','client_date','client_notes'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.addEventListener('input', saveState);
   });
@@ -1635,110 +1958,118 @@ function buildExportSnapshot() {
   const wrap = document.createElement('div');
   wrap.style.cssText = `
     position: fixed; left: -10000px; top: 0;
-    width: 1400px; padding: 32px;
+    width: 1100px; padding: 0;
     background: #ffffff; color: #0f172a;
     font-family: 'Inter', system-ui, sans-serif;
     box-sizing: border-box;
   `;
 
-  const cName = (document.getElementById('client_name')?.value || '').trim();
-  const cCnpj = (document.getElementById('client_cnpj')?.value || '').trim();
-  const cOwner = (document.getElementById('client_owner')?.value || '').trim();
-  const cRef = (document.getElementById('client_ref')?.value || '').trim();
-  const cDate = (document.getElementById('client_date')?.value || '').trim();
-  const cNotes = (document.getElementById('client_notes')?.value || '').trim();
+  // Determina categoria base (se "all", usa food como default visual)
+  const baseCat = (currentCategory === 'all') ? 'food' : currentCategory;
+  const slotRows = Array.from(document.querySelectorAll(`#simTable tbody tr[data-cat="${baseCat}"]`))
+    .filter(r => !r.classList.contains('slot-disabled'));
+  if (slotRows.length === 0) {
+    wrap.innerHTML = '<div style="padding:32px; color:#991b1b;">Selecione uma categoria antes de exportar.</div>';
+    document.body.appendChild(wrap);
+    return wrap;
+  }
+  const primary = slotRows[0];
+
+  const custoSP = parseFloat(primary.querySelector('.in-custo-sp').value) || 0;
+  const custoRJ = custoSP + FREIGHT_RJ;
+  const icmsEnt = parseFloat(primary.querySelector('.in-icms-ent').value) || 0;
+
+  const product = (document.getElementById('client_product')?.value || '').trim() || '—';
+  const manufacturer = (document.getElementById('client_manufacturer')?.value || '').trim() || '—';
+  const qtyKg = (document.getElementById('client_qty_kg')?.value || '').trim() || '—';
+  const packaging = (document.getElementById('client_packaging')?.value || '').trim() || '—';
+  const oc = (document.getElementById('client_oc')?.value || '').trim() || '—';
+  const lot = (document.getElementById('client_lot')?.value || '').trim() || '—';
+  const catLabel = CAT_LABELS[baseCat] || baseCat.toUpperCase();
   const today = new Date().toLocaleDateString('pt-BR');
 
-  const dateBR = cDate ? cDate.split('-').reverse().join('/') : today;
-  const catLabel = currentCategory === 'all' ? 'Todas as Categorias' : (CAT_LABELS[currentCategory] || currentCategory.toUpperCase());
+  // Formatador R$
+  const brl = (n) => 'R$ ' + (isFinite(n) ? n : 0).toFixed(2).replace('.', ',');
 
-  // Cabeçalho corporativo
-  const header = `
-    <div style="display:flex; justify-content:space-between; align-items:flex-start; padding-bottom:16px; border-bottom:3px solid #0a2540; margin-bottom:18px;">
-      <div>
-        <div style="font-size:32px; font-weight:800; letter-spacing:0.04em; color:#0a2540;">OXQUIM</div>
-        <div style="font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:#64748b; margin-top:2px;">Soluções Químicas</div>
+  // Cenários: lê valores já calculados das 3 linhas do simulador
+  const scenarioRows = slotRows.map(row => {
+    const icmsSP = parseFloat(row.querySelector('.in-icms-sai').value) || 0;
+    // Como o sistema tem 1 ICMS Saída por linha (compartilhado entre SP e RJ no cálculo),
+    // usamos o mesmo valor para ambas as colunas exibidas no PNG.
+    const sugSP = parseFloat((row.querySelector('.sugg2-sp').textContent || '0').replace(',', '.')) || 0;
+    const sugRJ = parseFloat((row.querySelector('.sugg2-rj').textContent || '0').replace(',', '.')) || 0;
+    return { icms_sp: icmsSP, icms_rj: icmsSP, sug_sp: sugSP, sug_rj: sugRJ };
+  });
+
+  // Cor da categoria (segmento)
+  const catColor = baseCat === 'food' ? '#5b9bd5' : (baseCat === 'cosm' ? '#e8a73c' : '#7fb84a');
+
+  wrap.innerHTML = `
+    <div style="border:2px solid #000; background:#fff;">
+      <!-- Cabeçalho preto -->
+      <div style="background:#000; color:#fff; text-align:center; padding:12px 16px; font-size:18px; font-weight:700; letter-spacing:0.02em; border-bottom:2px solid #000;">
+        Segue custo de entrada do seguinte item:
       </div>
-      <div style="text-align:right;">
-        <div style="font-size:18px; font-weight:700; color:#0a2540;">Simulador de Preços</div>
-        <div style="font-size:12px; color:#64748b; margin-top:2px;">Lucro Real · São Paulo &amp; Rio de Janeiro</div>
-        <div style="font-size:13px; color:#0a2540; margin-top:6px; font-weight:600;">Categoria: <span style="background:#0a2540; color:#fff; padding:2px 10px; border-radius:4px; letter-spacing:0.05em;">${catLabel}</span></div>
-        <div style="font-size:11px; color:#94a3b8; margin-top:6px;">Emitido em ${today}</div>
-      </div>
+
+      <!-- Linha de cabeçalhos primários -->
+      <table style="width:100%; border-collapse:collapse; font-family:'Segoe UI', Arial, sans-serif;">
+        <tr>
+          <th style="background:#000; color:#fff; padding:10px 8px; font-size:13px; text-align:center; border:1px solid #000; width:20%;">PRODUTO:</th>
+          <th style="background:#000; color:#fff; padding:10px 8px; font-size:13px; text-align:center; border:1px solid #000; width:20%;">CUSTO SP POR KG:</th>
+          <th style="background:#000; color:#fff; padding:10px 8px; font-size:13px; text-align:center; border:1px solid #000; width:12%;">ICMS:</th>
+          <th style="background:#000; color:#fff; padding:10px 8px; font-size:13px; text-align:center; border:1px solid #000; width:24%;">CUSTO RIO POR KG:</th>
+          <th style="background:#000; color:#fff; padding:10px 8px; font-size:13px; text-align:center; border:1px solid #000; width:24%;">FABRICANTE:</th>
+        </tr>
+        <tr>
+          <td style="padding:18px 8px; text-align:center; font-size:14px; font-weight:700; border:1px solid #000; background:#fff;">${product}</td>
+          <td style="padding:18px 8px; text-align:center; font-size:14px; font-weight:700; border:1px solid #000; background:#fff;">${brl(custoSP)}</td>
+          <td style="padding:18px 8px; text-align:center; font-size:14px; font-weight:700; border:1px solid #000; background:#fff;">${icmsEnt}%</td>
+          <td style="padding:18px 8px; text-align:center; font-size:14px; font-weight:700; border:1px solid #000; background:#fff;">${brl(custoRJ)}</td>
+          <td style="padding:18px 8px; text-align:center; font-size:14px; font-weight:700; border:1px solid #000; background:#fff;">${manufacturer}</td>
+        </tr>
+
+        <!-- Linha de cabeçalhos secundários -->
+        <tr>
+          <th style="background:#000; color:#fff; padding:10px 8px; font-size:13px; text-align:center; border:1px solid #000;">COMPRAMOS EM KG:</th>
+          <th style="background:#000; color:#fff; padding:10px 8px; font-size:13px; text-align:center; border:1px solid #000;">EMBALAGEM:</th>
+          <th style="background:#000; color:#fff; padding:10px 8px; font-size:13px; text-align:center; border:1px solid #000;">OC:</th>
+          <th style="background:#000; color:#fff; padding:10px 8px; font-size:13px; text-align:center; border:1px solid #000;">LOTE:</th>
+          <th style="background:#000; color:#fff; padding:10px 8px; font-size:13px; text-align:center; border:1px solid #000;">Segmento:</th>
+        </tr>
+        <tr>
+          <td style="padding:18px 8px; text-align:center; font-size:14px; font-weight:700; border:1px solid #000; background:#fff;">${qtyKg}</td>
+          <td style="padding:18px 8px; text-align:center; font-size:14px; font-weight:700; border:1px solid #000; background:#fff;">${packaging}</td>
+          <td style="padding:18px 8px; text-align:center; font-size:14px; font-weight:700; border:1px solid #000; background:#fff;">${oc}</td>
+          <td style="padding:18px 8px; text-align:center; font-size:13px; font-weight:700; border:1px solid #000; background:#fff;">${lot}</td>
+          <td style="padding:18px 8px; text-align:center; font-size:14px; font-weight:700; border:1px solid #000; background:${catColor}; color:#fff;">${catLabel}</td>
+        </tr>
+
+        <!-- Cabeçalhos da tabela de cenários -->
+        <tr>
+          <th style="background:#f4a261; color:#000; padding:8px; font-size:13px; text-align:center; border:1px solid #000; font-weight:700;">ICMS:</th>
+          <th style="background:#f4a261; color:#000; padding:8px; font-size:13px; text-align:center; border:1px solid #000; font-weight:700;" colspan="2">BRONZE EM SP:</th>
+          <th style="background:#f4a261; color:#000; padding:8px; font-size:13px; text-align:center; border:1px solid #000; font-weight:700;">ICMS:</th>
+          <th style="background:#f4a261; color:#000; padding:8px; font-size:13px; text-align:center; border:1px solid #000; font-weight:700;">BRONZE NO RJ:</th>
+        </tr>
+
+        <!-- Linhas de cenários -->
+        ${scenarioRows.map(s => `
+          <tr>
+            <td style="background:#fff; padding:10px 8px; text-align:center; font-size:14px; font-weight:700; border:1px solid #000;">${s.icms_sp}%</td>
+            <td style="background:#fff700; padding:10px 8px; text-align:center; font-size:14px; font-weight:700; border:1px solid #000; color:#c00;" colspan="2">${brl(s.sug_sp)}</td>
+            <td style="background:#fff; padding:10px 8px; text-align:center; font-size:14px; font-weight:700; border:1px solid #000;">${s.icms_rj}%</td>
+            <td style="background:#fff700; padding:10px 8px; text-align:center; font-size:14px; font-weight:700; border:1px solid #000; color:#c00;">${brl(s.sug_rj)}</td>
+          </tr>
+        `).join('')}
+      </table>
     </div>
-  `;
 
-  // Bloco de cliente (só mostra os campos preenchidos)
-  const clientFields = [];
-  if (cName) clientFields.push(['Cliente', cName]);
-  if (cCnpj) clientFields.push(['CNPJ', cCnpj]);
-  if (cOwner) clientFields.push(['Responsável', cOwner]);
-  if (cRef) clientFields.push(['Referência', cRef]);
-  if (cDate) clientFields.push(['Data', dateBR]);
-  let clientBlock = '';
-  if (clientFields.length) {
-    const cells = clientFields.map(([k,v]) =>
-      `<div style="flex:1; min-width:200px; padding:8px 12px; background:#f3f7fb; border-left:3px solid #0a2540;">
-        <div style="font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:#64748b;">${k}</div>
-        <div style="font-size:13px; font-weight:600; color:#0f172a; margin-top:2px;">${v}</div>
-      </div>`).join('');
-    clientBlock = `<div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;">${cells}</div>`;
-    if (cNotes) {
-      clientBlock += `<div style="padding:10px 12px; background:#fef9c3; border-left:3px solid #b45309; margin-bottom:16px; font-size:12px; color:#78350f;"><b>Obs.:</b> ${cNotes}</div>`;
-    }
-  }
-
-  // Linhas da tabela (apenas categoria selecionada)
-  const tbodyRows = getVisibleRows().map(row => {
-    const cat = CAT_LABELS[row.dataset.cat] || row.dataset.cat;
-    return `<tr>
-      <td style="padding:10px 8px; font-weight:700; background:#0a2540; color:#fff;">${cat}</td>
-      <td style="padding:10px 8px; text-align:right; font-family:'JetBrains Mono',monospace;">${row.querySelector('.in-custo-sp').value}</td>
-      <td style="padding:10px 8px; text-align:right; font-family:'JetBrains Mono',monospace;">${row.querySelector('.custo-rj').textContent}</td>
-      <td style="padding:10px 8px; text-align:center;">${row.querySelector('.in-icms-ent').value}%</td>
-      <td style="padding:10px 8px; text-align:center;">${row.querySelector('.in-icms-sai').value}%</td>
-      <td style="padding:10px 8px; text-align:right; font-family:'JetBrains Mono',monospace;">${parseFloat(row.querySelector('.in-ll2-sp').value).toFixed(2).replace('.', ',')}%</td>
-      <td style="padding:10px 8px; text-align:right; font-family:'JetBrains Mono',monospace; font-weight:700; background:#0a2540; color:#fff;">${row.querySelector('.sugg2-sp').textContent}</td>
-      <td style="padding:10px 8px; text-align:right; font-family:'JetBrains Mono',monospace; color:#475569;">${row.querySelector('.ll-sp').textContent}</td>
-      <td style="padding:10px 8px; text-align:right; font-family:'JetBrains Mono',monospace;">${parseFloat(row.querySelector('.in-ll2-rj').value).toFixed(2).replace('.', ',')}%</td>
-      <td style="padding:10px 8px; text-align:right; font-family:'JetBrains Mono',monospace; font-weight:700; background:#0a2540; color:#fff;">${row.querySelector('.sugg2-rj').textContent}</td>
-      <td style="padding:10px 8px; text-align:right; font-family:'JetBrains Mono',monospace; color:#475569;">${row.querySelector('.ll-rj').textContent}</td>
-    </tr>`;
-  }).join('');
-
-  const table = `
-    <table style="width:100%; border-collapse:collapse; font-size:12px; border:1px solid #cbd5e1;">
-      <thead>
-        <tr style="background:#0a2540; color:#fff;">
-          <th rowspan="2" style="padding:10px 8px; text-align:left; border-right:1px solid #1e3a5f;">Categoria</th>
-          <th rowspan="2" style="padding:10px 8px; text-align:right; border-right:1px solid #1e3a5f;">Custo SP<br>(R$)</th>
-          <th rowspan="2" style="padding:10px 8px; text-align:right; border-right:1px solid #1e3a5f;">Custo RJ<br>(R$)</th>
-          <th rowspan="2" style="padding:10px 8px; text-align:center; border-right:1px solid #1e3a5f;">ICMS<br>Entrada</th>
-          <th rowspan="2" style="padding:10px 8px; text-align:center; border-right:2px solid #b45309;">ICMS<br>Saída</th>
-          <th colspan="3" style="padding:8px; text-align:center; background:#14406d; border-bottom:1px solid #1e3a5f; border-right:2px solid #b45309;">SÃO PAULO</th>
-          <th colspan="3" style="padding:8px; text-align:center; background:#374151;">RIO DE JANEIRO</th>
-        </tr>
-        <tr style="background:#1c5285; color:#fff; font-size:11px;">
-          <th style="padding:8px; text-align:right;">LL alvo</th>
-          <th style="padding:8px; text-align:right;">Valor Sug.</th>
-          <th style="padding:8px; text-align:right; border-right:2px solid #b45309;">LL real</th>
-          <th style="padding:8px; text-align:right; background:#4b5563;">LL alvo</th>
-          <th style="padding:8px; text-align:right; background:#4b5563;">Valor Sug.</th>
-          <th style="padding:8px; text-align:right; background:#4b5563;">LL real</th>
-        </tr>
-      </thead>
-      <tbody>${tbodyRows}</tbody>
-    </table>
-  `;
-
-  const footer = `
-    <div style="margin-top:18px; padding-top:12px; border-top:1px solid #cbd5e1; display:flex; justify-content:space-between; font-size:10px; color:#94a3b8;">
+    <!-- Rodapé discreto -->
+    <div style="margin-top:8px; padding:6px 4px; display:flex; justify-content:space-between; font-size:9px; color:#94a3b8; font-family:'Segoe UI', Arial, sans-serif;">
       <span>OXQUIM · Simulador de Preços · Lucro Real</span>
-      <span>Cálculo iterativo do Valor Sugerido (LL alvo)</span>
+      <span>Emitido em ${today}</span>
     </div>
   `;
-
-  wrap.innerHTML = header + clientBlock + table + footer;
   document.body.appendChild(wrap);
   return wrap;
 }
@@ -1821,6 +2152,8 @@ function init() {
   bindTaxForm();
   bindClientInputs();
   bindCatFilter();
+  bindSlotControl();
+  applySlotFilter();
   applyCatFilter(currentCategory);
 }
 
