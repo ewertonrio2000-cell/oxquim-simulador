@@ -2432,9 +2432,31 @@ function switchTab(name) {
 }
 
 /* ========= EVENT BINDING ========= */
+/* Propaga ICMS Entrada do slot 1 (de qualquer categoria) para TODOS os outros
+ * selects de Entrada (SP e RJ) de todas as linhas e categorias.
+ * Disparado apenas quando a alteração é em um select de Entrada da slot 1. */
+function propagateIcmsEntFromSlot1(sourceSelect) {
+  const newValue = sourceSelect.value;
+  // Atualiza todos os selects de entrada (SP e RJ) em todas as linhas
+  document.querySelectorAll('#simTable tbody tr').forEach(row => {
+    const entSP = row.querySelector('.in-icms-ent-sp');
+    const entRJ = row.querySelector('.in-icms-ent-rj');
+    if (entSP && entSP !== sourceSelect && entSP.value !== newValue) entSP.value = newValue;
+    if (entRJ && entRJ !== sourceSelect && entRJ.value !== newValue) entRJ.value = newValue;
+  });
+}
+
 function bindRowInputs() {
   document.querySelectorAll('#simTable tbody tr').forEach(row => {
-    const onChange = () => { recalcRow(row); recalcAll(); saveState(); };
+    const slot = row.dataset.slot || '1';
+    const onChange = (e) => {
+      // Se for select de Entrada da slot 1, propaga para todos os outros selects de entrada
+      if (slot === '1' && e && e.target && e.target.matches('.in-icms-ent-sp, .in-icms-ent-rj')) {
+        propagateIcmsEntFromSlot1(e.target);
+      }
+      recalcAll();
+      saveState();
+    };
     row.querySelectorAll('input, select').forEach(el => {
       el.addEventListener('input', onChange);
       el.addEventListener('change', onChange);
