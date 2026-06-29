@@ -349,10 +349,6 @@ body {
 }
 .cat-section.food::before,
 .cat-section.cosm::before,
-.cat-section.tinta::before,
-.cat-section.domiss::before,
-.cat-section.borr::before,
-.cat-section.fertil::before,
 .cat-section.feed::before { background: var(--brand-700); }
 .cat-title {
   display: flex;
@@ -377,10 +373,6 @@ body {
 }
 .cat-food .category-badge, .cat-badge-food,
 .cat-cosm .category-badge, .cat-badge-cosm,
-.cat-tinta .category-badge, .cat-badge-tinta,
-.cat-domiss .category-badge, .cat-badge-domiss,
-.cat-borr .category-badge, .cat-badge-borr,
-.cat-fertil .category-badge, .cat-badge-fertil,
 .cat-feed .category-badge, .cat-badge-feed {
   background: var(--brand-900);
   color: #fff;
@@ -934,10 +926,6 @@ table.sim select.icms-ent {
 }
 .tag-food { background: #1c5285; }
 .tag-cosm { background: #b45309; }
-.tag-tinta { background: #6d28d9; }
-.tag-domiss { background: #db2777; }
-.tag-borr { background: #1f2937; }
-.tag-fertil { background: #ca8a04; }
 .tag-feed { background: #166534; }
 .slot-chk {
   display: inline-flex;
@@ -1102,7 +1090,7 @@ table.sim tbody tr[data-slot="3"] td:first-child {
             <select id="tax_food_icms_deb">
               <option value="4">4%</option>
               <option value="7">7%</option>
-              <option value="12">12%</option><option value="17">17%</option>
+              <option value="12">12%</option>
               <option value="18">18%</option>
               <option value="22" selected>22%</option>
             </select>
@@ -1143,171 +1131,7 @@ table.sim tbody tr[data-slot="3"] td:first-child {
             <select id="tax_cosm_icms_deb">
               <option value="4">4%</option>
               <option value="7">7%</option>
-              <option value="12">12%</option><option value="17">17%</option>
-              <option value="18">18%</option>
-              <option value="22" selected>22%</option>
-            </select>
-          </div>
-        </div>
-        <div class="fixed-box">
-          <h4>Valores fixos (aplicados automaticamente)</h4>
-          <div class="fixed-list">
-            <span>PIS Débito <b>1,65%</b></span>
-            <span>COFINS Débito <b>7,60%</b></span>
-            <span>PIS Crédito <b>1,65%</b></span>
-            <span>COFINS Crédito <b>7,60%</b></span>
-            <span>CSLL/IR <b>1,00%</b></span>
-            <span>Despesa Operacional <b>3,80%</b></span>
-            <span>Corretor <b>0,00%</b></span>
-            <span>Mark-up padrão <b>1,171</b></span>
-          </div>
-        </div>
-      </div>
-
-      <!-- TINTAS -->
-      <div class="cat-section tinta cat-tinta">
-        <div class="cat-title">
-          <span class="category-badge cat-badge-tinta">TINTAS</span>
-        </div>
-        <div class="tax-row">
-          <div class="tax-item">
-            <label>ICMS Entrada (Crédito)</label>
-            <select id="tax_tinta_icms_cred">
-              <option value="4" selected>4%</option>
-              <option value="7">7%</option>
               <option value="12">12%</option>
-              <option value="18">18%</option>
-            </select>
-          </div>
-          <div class="tax-item">
-            <label>ICMS Saída (Débito)</label>
-            <select id="tax_tinta_icms_deb">
-              <option value="4">4%</option>
-              <option value="7">7%</option>
-              <option value="12">12%</option><option value="17">17%</option>
-              <option value="18">18%</option>
-              <option value="22" selected>22%</option>
-            </select>
-          </div>
-        </div>
-        <div class="fixed-box">
-          <h4>Valores fixos (aplicados automaticamente)</h4>
-          <div class="fixed-list">
-            <span>PIS Débito <b>1,65%</b></span>
-            <span>COFINS Débito <b>7,60%</b></span>
-            <span>PIS Crédito <b>1,65%</b></span>
-            <span>COFINS Crédito <b>7,60%</b></span>
-            <span>CSLL/IR <b>1,00%</b></span>
-            <span>Despesa Operacional <b>3,80%</b></span>
-            <span>Corretor <b>0,00%</b></span>
-            <span>Mark-up padrão <b>1,171</b></span>
-          </div>
-        </div>
-      </div>
-
-      <!-- DOMISSANITÁRIOS -->
-      <div class="cat-section domiss cat-domiss">
-        <div class="cat-title">
-          <span class="category-badge cat-badge-domiss">DOMISSANITÁRIOS</span>
-        </div>
-        <div class="tax-row">
-          <div class="tax-item">
-            <label>ICMS Entrada (Crédito)</label>
-            <select id="tax_domiss_icms_cred">
-              <option value="4" selected>4%</option>
-              <option value="7">7%</option>
-              <option value="12">12%</option>
-              <option value="18">18%</option>
-            </select>
-          </div>
-          <div class="tax-item">
-            <label>ICMS Saída (Débito)</label>
-            <select id="tax_domiss_icms_deb">
-              <option value="4">4%</option>
-              <option value="7">7%</option>
-              <option value="12">12%</option><option value="17">17%</option>
-              <option value="18">18%</option>
-              <option value="22" selected>22%</option>
-            </select>
-          </div>
-        </div>
-        <div class="fixed-box">
-          <h4>Valores fixos (aplicados automaticamente)</h4>
-          <div class="fixed-list">
-            <span>PIS Débito <b>1,65%</b></span>
-            <span>COFINS Débito <b>7,60%</b></span>
-            <span>PIS Crédito <b>1,65%</b></span>
-            <span>COFINS Crédito <b>7,60%</b></span>
-            <span>CSLL/IR <b>1,00%</b></span>
-            <span>Despesa Operacional <b>3,80%</b></span>
-            <span>Corretor <b>0,00%</b></span>
-            <span>Mark-up padrão <b>1,171</b></span>
-          </div>
-        </div>
-      </div>
-
-      <!-- BORRACHA -->
-      <div class="cat-section borr cat-borr">
-        <div class="cat-title">
-          <span class="category-badge cat-badge-borr">BORRACHA</span>
-        </div>
-        <div class="tax-row">
-          <div class="tax-item">
-            <label>ICMS Entrada (Crédito)</label>
-            <select id="tax_borr_icms_cred">
-              <option value="4" selected>4%</option>
-              <option value="7">7%</option>
-              <option value="12">12%</option>
-              <option value="18">18%</option>
-            </select>
-          </div>
-          <div class="tax-item">
-            <label>ICMS Saída (Débito)</label>
-            <select id="tax_borr_icms_deb">
-              <option value="4">4%</option>
-              <option value="7">7%</option>
-              <option value="12">12%</option><option value="17">17%</option>
-              <option value="18">18%</option>
-              <option value="22" selected>22%</option>
-            </select>
-          </div>
-        </div>
-        <div class="fixed-box">
-          <h4>Valores fixos (aplicados automaticamente)</h4>
-          <div class="fixed-list">
-            <span>PIS Débito <b>1,65%</b></span>
-            <span>COFINS Débito <b>7,60%</b></span>
-            <span>PIS Crédito <b>1,65%</b></span>
-            <span>COFINS Crédito <b>7,60%</b></span>
-            <span>CSLL/IR <b>1,00%</b></span>
-            <span>Despesa Operacional <b>3,80%</b></span>
-            <span>Corretor <b>0,00%</b></span>
-            <span>Mark-up padrão <b>1,171</b></span>
-          </div>
-        </div>
-      </div>
-
-      <!-- FERTILIZANTES -->
-      <div class="cat-section fertil cat-fertil">
-        <div class="cat-title">
-          <span class="category-badge cat-badge-fertil">FERTILIZANTES</span>
-        </div>
-        <div class="tax-row">
-          <div class="tax-item">
-            <label>ICMS Entrada (Crédito)</label>
-            <select id="tax_fertil_icms_cred">
-              <option value="4" selected>4%</option>
-              <option value="7">7%</option>
-              <option value="12">12%</option>
-              <option value="18">18%</option>
-            </select>
-          </div>
-          <div class="tax-item">
-            <label>ICMS Saída (Débito)</label>
-            <select id="tax_fertil_icms_deb">
-              <option value="4">4%</option>
-              <option value="7">7%</option>
-              <option value="12">12%</option><option value="17">17%</option>
               <option value="18">18%</option>
               <option value="22" selected>22%</option>
             </select>
@@ -1348,7 +1172,7 @@ table.sim tbody tr[data-slot="3"] td:first-child {
             <select id="tax_feed_icms_deb">
               <option value="4">4%</option>
               <option value="7">7%</option>
-              <option value="12" selected>12%</option><option value="17">17%</option>
+              <option value="12" selected>12%</option>
               <option value="18">18%</option>
               <option value="22">22%</option>
             </select>
@@ -1404,10 +1228,6 @@ table.sim tbody tr[data-slot="3"] td:first-child {
         <span class="cat-filter-label">Visualizar categoria:</span>
         <button class="cat-filter-btn active" data-cat="food">FOOD</button>
         <button class="cat-filter-btn" data-cat="cosm">COSMÉTICOS</button>
-        <button class="cat-filter-btn" data-cat="tinta">TINTAS</button>
-        <button class="cat-filter-btn" data-cat="domiss">DOMISSANITÁRIOS</button>
-        <button class="cat-filter-btn" data-cat="borr">BORRACHA</button>
-        <button class="cat-filter-btn" data-cat="fertil">FERTILIZANTES</button>
         <button class="cat-filter-btn" data-cat="feed">FEED</button>
         <button class="cat-filter-btn" data-cat="all">TODAS</button>
       </div>
@@ -1456,30 +1276,6 @@ table.sim tbody tr[data-slot="3"] td:first-child {
             <label class="slot-chk"><input type="checkbox" data-cat="cosm" data-slot="2" checked> Linha 2</label>
             <label class="slot-chk"><input type="checkbox" data-cat="cosm" data-slot="3" checked> Linha 3</label>
           </div>
-          <div class="slot-group" data-cat="tinta">
-            <span class="slot-group-tag tag-tinta">TINTAS</span>
-            <label class="slot-chk"><input type="checkbox" data-cat="tinta" data-slot="1" checked disabled> Linha 1</label>
-            <label class="slot-chk"><input type="checkbox" data-cat="tinta" data-slot="2" checked> Linha 2</label>
-            <label class="slot-chk"><input type="checkbox" data-cat="tinta" data-slot="3" checked> Linha 3</label>
-          </div>
-          <div class="slot-group" data-cat="domiss">
-            <span class="slot-group-tag tag-domiss">DOMISS.</span>
-            <label class="slot-chk"><input type="checkbox" data-cat="domiss" data-slot="1" checked disabled> Linha 1</label>
-            <label class="slot-chk"><input type="checkbox" data-cat="domiss" data-slot="2" checked> Linha 2</label>
-            <label class="slot-chk"><input type="checkbox" data-cat="domiss" data-slot="3" checked> Linha 3</label>
-          </div>
-          <div class="slot-group" data-cat="borr">
-            <span class="slot-group-tag tag-borr">BORRACHA</span>
-            <label class="slot-chk"><input type="checkbox" data-cat="borr" data-slot="1" checked disabled> Linha 1</label>
-            <label class="slot-chk"><input type="checkbox" data-cat="borr" data-slot="2" checked> Linha 2</label>
-            <label class="slot-chk"><input type="checkbox" data-cat="borr" data-slot="3" checked> Linha 3</label>
-          </div>
-          <div class="slot-group" data-cat="fertil">
-            <span class="slot-group-tag tag-fertil">FERTIL.</span>
-            <label class="slot-chk"><input type="checkbox" data-cat="fertil" data-slot="1" checked disabled> Linha 1</label>
-            <label class="slot-chk"><input type="checkbox" data-cat="fertil" data-slot="2" checked> Linha 2</label>
-            <label class="slot-chk"><input type="checkbox" data-cat="fertil" data-slot="3" checked> Linha 3</label>
-          </div>
           <div class="slot-group" data-cat="feed">
             <span class="slot-group-tag tag-feed">FEED</span>
             <label class="slot-chk"><input type="checkbox" data-cat="feed" data-slot="1" checked disabled> Linha 1</label>
@@ -1527,7 +1323,7 @@ table.sim tbody tr[data-slot="3"] td:first-child {
               <td class="rj-custo custo-rj" rowspan="3">15,16</td>
               <td class="calc-sp markup-cell" rowspan="3">1,171</td>
               <td><select class="icms-ent in-icms-ent-sp"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="17">17%</option><option value="18">18%</option><option value="22">22%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
               <td class="sugg-sp sugg2-sp"></td>
               <td class="calc-sp tot-imp-sp"></td>
@@ -1535,7 +1331,7 @@ table.sim tbody tr[data-slot="3"] td:first-child {
               <td class="calc-sp pl-sp"></td>
               <td class="calc-ll-sp ll-sp"></td>
               <td><select class="icms-ent in-icms-ent-rj"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="17">17%</option><option value="18">18%</option><option value="22">22%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
               <td class="sugg-rj sugg2-rj"></td>
               <td class="calc-rj tot-imp-rj"></td>
@@ -1545,7 +1341,7 @@ table.sim tbody tr[data-slot="3"] td:first-child {
             </tr>
             <tr data-cat="food" data-slot="2">
               <td><select class="icms-ent in-icms-ent-sp"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="17">17%</option><option value="18">18%</option><option value="22">22%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
               <td class="sugg-sp sugg2-sp"></td>
               <td class="calc-sp tot-imp-sp"></td>
@@ -1553,7 +1349,7 @@ table.sim tbody tr[data-slot="3"] td:first-child {
               <td class="calc-sp pl-sp"></td>
               <td class="calc-ll-sp ll-sp"></td>
               <td><select class="icms-ent in-icms-ent-rj"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="17">17%</option><option value="18">18%</option><option value="22">22%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
               <td class="sugg-rj sugg2-rj"></td>
               <td class="calc-rj tot-imp-rj"></td>
@@ -1563,7 +1359,7 @@ table.sim tbody tr[data-slot="3"] td:first-child {
             </tr>
             <tr data-cat="food" data-slot="3" class="slot-last">
               <td><select class="icms-ent in-icms-ent-sp"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="17">17%</option><option value="18" selected>18%</option><option value="22">22%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="18" selected>18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
               <td class="sugg-sp sugg2-sp"></td>
               <td class="calc-sp tot-imp-sp"></td>
@@ -1571,7 +1367,7 @@ table.sim tbody tr[data-slot="3"] td:first-child {
               <td class="calc-sp pl-sp"></td>
               <td class="calc-ll-sp ll-sp"></td>
               <td><select class="icms-ent in-icms-ent-rj"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="17">17%</option><option value="18">18%</option><option value="22" selected>22%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option><option value="22" selected>22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
               <td class="sugg-rj sugg2-rj"></td>
               <td class="calc-rj tot-imp-rj"></td>
@@ -1586,7 +1382,7 @@ table.sim tbody tr[data-slot="3"] td:first-child {
               <td class="rj-custo custo-rj" rowspan="3">15,16</td>
               <td class="calc-sp markup-cell" rowspan="3">1,171</td>
               <td><select class="icms-ent in-icms-ent-sp"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="17">17%</option><option value="18">18%</option><option value="22">22%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
               <td class="sugg-sp sugg2-sp"></td>
               <td class="calc-sp tot-imp-sp"></td>
@@ -1594,7 +1390,7 @@ table.sim tbody tr[data-slot="3"] td:first-child {
               <td class="calc-sp pl-sp"></td>
               <td class="calc-ll-sp ll-sp"></td>
               <td><select class="icms-ent in-icms-ent-rj"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="17">17%</option><option value="18">18%</option><option value="22">22%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
               <td class="sugg-rj sugg2-rj"></td>
               <td class="calc-rj tot-imp-rj"></td>
@@ -1604,7 +1400,7 @@ table.sim tbody tr[data-slot="3"] td:first-child {
             </tr>
             <tr data-cat="cosm" data-slot="2">
               <td><select class="icms-ent in-icms-ent-sp"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="17">17%</option><option value="18">18%</option><option value="22">22%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
               <td class="sugg-sp sugg2-sp"></td>
               <td class="calc-sp tot-imp-sp"></td>
@@ -1612,7 +1408,7 @@ table.sim tbody tr[data-slot="3"] td:first-child {
               <td class="calc-sp pl-sp"></td>
               <td class="calc-ll-sp ll-sp"></td>
               <td><select class="icms-ent in-icms-ent-rj"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="17">17%</option><option value="18">18%</option><option value="22">22%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
               <td class="sugg-rj sugg2-rj"></td>
               <td class="calc-rj tot-imp-rj"></td>
@@ -1622,7 +1418,7 @@ table.sim tbody tr[data-slot="3"] td:first-child {
             </tr>
             <tr data-cat="cosm" data-slot="3" class="slot-last">
               <td><select class="icms-ent in-icms-ent-sp"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="17">17%</option><option value="18" selected>18%</option><option value="22">22%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="18" selected>18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
               <td class="sugg-sp sugg2-sp"></td>
               <td class="calc-sp tot-imp-sp"></td>
@@ -1630,245 +1426,7 @@ table.sim tbody tr[data-slot="3"] td:first-child {
               <td class="calc-sp pl-sp"></td>
               <td class="calc-ll-sp ll-sp"></td>
               <td><select class="icms-ent in-icms-ent-rj"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="17">17%</option><option value="18">18%</option><option value="22" selected>22%</option></select></td>
-              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
-              <td class="sugg-rj sugg2-rj"></td>
-              <td class="calc-rj tot-imp-rj"></td>
-              <td class="calc-rj subtot-rj"></td>
-              <td class="calc-rj pl-rj"></td>
-              <td class="calc-ll-rj ll-rj"></td>
-            </tr>
-            <!-- ===================== TINTAS / DOMISSANIT. / BORRACHA / FERTIL. ===================== -->
-            <tr data-cat="tinta" data-slot="1" class="slot-first">
-              <td class="label" rowspan="3"><span class="category-badge cat-badge-tinta">TINTAS</span></td>
-              <td class="input-cell" rowspan="3"><input type="number" step="0.01" class="in-custo-sp" value="14.95"></td>
-              <td class="rj-custo custo-rj" rowspan="3">15,16</td>
-              <td class="calc-sp markup-cell" rowspan="3">1,171</td>
-              <td><select class="icms-ent in-icms-ent-sp"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="17">17%</option><option value="18">18%</option><option value="22">22%</option></select></td>
-              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
-              <td class="sugg-sp sugg2-sp"></td>
-              <td class="calc-sp tot-imp-sp"></td>
-              <td class="calc-sp subtot-sp"></td>
-              <td class="calc-sp pl-sp"></td>
-              <td class="calc-ll-sp ll-sp"></td>
-              <td><select class="icms-ent in-icms-ent-rj"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="17">17%</option><option value="18">18%</option><option value="22">22%</option></select></td>
-              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
-              <td class="sugg-rj sugg2-rj"></td>
-              <td class="calc-rj tot-imp-rj"></td>
-              <td class="calc-rj subtot-rj"></td>
-              <td class="calc-rj pl-rj"></td>
-              <td class="calc-ll-rj ll-rj"></td>
-            </tr>
-            <tr data-cat="tinta" data-slot="2">
-              <td><select class="icms-ent in-icms-ent-sp"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="17">17%</option><option value="18">18%</option><option value="22">22%</option></select></td>
-              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
-              <td class="sugg-sp sugg2-sp"></td>
-              <td class="calc-sp tot-imp-sp"></td>
-              <td class="calc-sp subtot-sp"></td>
-              <td class="calc-sp pl-sp"></td>
-              <td class="calc-ll-sp ll-sp"></td>
-              <td><select class="icms-ent in-icms-ent-rj"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="17">17%</option><option value="18">18%</option><option value="22">22%</option></select></td>
-              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
-              <td class="sugg-rj sugg2-rj"></td>
-              <td class="calc-rj tot-imp-rj"></td>
-              <td class="calc-rj subtot-rj"></td>
-              <td class="calc-rj pl-rj"></td>
-              <td class="calc-ll-rj ll-rj"></td>
-            </tr>
-            <tr data-cat="tinta" data-slot="3" class="slot-last">
-              <td><select class="icms-ent in-icms-ent-sp"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="17">17%</option><option value="18" selected>18%</option><option value="22">22%</option></select></td>
-              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
-              <td class="sugg-sp sugg2-sp"></td>
-              <td class="calc-sp tot-imp-sp"></td>
-              <td class="calc-sp subtot-sp"></td>
-              <td class="calc-sp pl-sp"></td>
-              <td class="calc-ll-sp ll-sp"></td>
-              <td><select class="icms-ent in-icms-ent-rj"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="17">17%</option><option value="18">18%</option><option value="22" selected>22%</option></select></td>
-              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
-              <td class="sugg-rj sugg2-rj"></td>
-              <td class="calc-rj tot-imp-rj"></td>
-              <td class="calc-rj subtot-rj"></td>
-              <td class="calc-rj pl-rj"></td>
-              <td class="calc-ll-rj ll-rj"></td>
-            </tr>
-
-
-            <!-- ===================== DOMISSANITÁRIOS ===================== -->
-            <tr data-cat="domiss" data-slot="1" class="slot-first">
-              <td class="label" rowspan="3"><span class="category-badge cat-badge-domiss">DOMISSANITÁRIOS</span></td>
-              <td class="input-cell" rowspan="3"><input type="number" step="0.01" class="in-custo-sp" value="14.95"></td>
-              <td class="rj-custo custo-rj" rowspan="3">15,16</td>
-              <td class="calc-sp markup-cell" rowspan="3">1,171</td>
-              <td><select class="icms-ent in-icms-ent-sp"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="17">17%</option><option value="18">18%</option><option value="22">22%</option></select></td>
-              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
-              <td class="sugg-sp sugg2-sp"></td>
-              <td class="calc-sp tot-imp-sp"></td>
-              <td class="calc-sp subtot-sp"></td>
-              <td class="calc-sp pl-sp"></td>
-              <td class="calc-ll-sp ll-sp"></td>
-              <td><select class="icms-ent in-icms-ent-rj"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="17">17%</option><option value="18">18%</option><option value="22">22%</option></select></td>
-              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
-              <td class="sugg-rj sugg2-rj"></td>
-              <td class="calc-rj tot-imp-rj"></td>
-              <td class="calc-rj subtot-rj"></td>
-              <td class="calc-rj pl-rj"></td>
-              <td class="calc-ll-rj ll-rj"></td>
-            </tr>
-            <tr data-cat="domiss" data-slot="2">
-              <td><select class="icms-ent in-icms-ent-sp"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="17">17%</option><option value="18">18%</option><option value="22">22%</option></select></td>
-              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
-              <td class="sugg-sp sugg2-sp"></td>
-              <td class="calc-sp tot-imp-sp"></td>
-              <td class="calc-sp subtot-sp"></td>
-              <td class="calc-sp pl-sp"></td>
-              <td class="calc-ll-sp ll-sp"></td>
-              <td><select class="icms-ent in-icms-ent-rj"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="17">17%</option><option value="18">18%</option><option value="22">22%</option></select></td>
-              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
-              <td class="sugg-rj sugg2-rj"></td>
-              <td class="calc-rj tot-imp-rj"></td>
-              <td class="calc-rj subtot-rj"></td>
-              <td class="calc-rj pl-rj"></td>
-              <td class="calc-ll-rj ll-rj"></td>
-            </tr>
-            <tr data-cat="domiss" data-slot="3" class="slot-last">
-              <td><select class="icms-ent in-icms-ent-sp"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="17">17%</option><option value="18" selected>18%</option><option value="22">22%</option></select></td>
-              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
-              <td class="sugg-sp sugg2-sp"></td>
-              <td class="calc-sp tot-imp-sp"></td>
-              <td class="calc-sp subtot-sp"></td>
-              <td class="calc-sp pl-sp"></td>
-              <td class="calc-ll-sp ll-sp"></td>
-              <td><select class="icms-ent in-icms-ent-rj"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="17">17%</option><option value="18">18%</option><option value="22" selected>22%</option></select></td>
-              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
-              <td class="sugg-rj sugg2-rj"></td>
-              <td class="calc-rj tot-imp-rj"></td>
-              <td class="calc-rj subtot-rj"></td>
-              <td class="calc-rj pl-rj"></td>
-              <td class="calc-ll-rj ll-rj"></td>
-            </tr>
-            <!-- ===================== BORRACHA ===================== -->
-            <tr data-cat="borr" data-slot="1" class="slot-first">
-              <td class="label" rowspan="3"><span class="category-badge cat-badge-borr">BORRACHA</span></td>
-              <td class="input-cell" rowspan="3"><input type="number" step="0.01" class="in-custo-sp" value="14.95"></td>
-              <td class="rj-custo custo-rj" rowspan="3">15,16</td>
-              <td class="calc-sp markup-cell" rowspan="3">1,171</td>
-              <td><select class="icms-ent in-icms-ent-sp"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="17">17%</option><option value="18">18%</option><option value="22">22%</option></select></td>
-              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
-              <td class="sugg-sp sugg2-sp"></td>
-              <td class="calc-sp tot-imp-sp"></td>
-              <td class="calc-sp subtot-sp"></td>
-              <td class="calc-sp pl-sp"></td>
-              <td class="calc-ll-sp ll-sp"></td>
-              <td><select class="icms-ent in-icms-ent-rj"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="17">17%</option><option value="18">18%</option><option value="22">22%</option></select></td>
-              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
-              <td class="sugg-rj sugg2-rj"></td>
-              <td class="calc-rj tot-imp-rj"></td>
-              <td class="calc-rj subtot-rj"></td>
-              <td class="calc-rj pl-rj"></td>
-              <td class="calc-ll-rj ll-rj"></td>
-            </tr>
-            <tr data-cat="borr" data-slot="2">
-              <td><select class="icms-ent in-icms-ent-sp"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="17">17%</option><option value="18">18%</option><option value="22">22%</option></select></td>
-              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
-              <td class="sugg-sp sugg2-sp"></td>
-              <td class="calc-sp tot-imp-sp"></td>
-              <td class="calc-sp subtot-sp"></td>
-              <td class="calc-sp pl-sp"></td>
-              <td class="calc-ll-sp ll-sp"></td>
-              <td><select class="icms-ent in-icms-ent-rj"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="17">17%</option><option value="18">18%</option><option value="22">22%</option></select></td>
-              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
-              <td class="sugg-rj sugg2-rj"></td>
-              <td class="calc-rj tot-imp-rj"></td>
-              <td class="calc-rj subtot-rj"></td>
-              <td class="calc-rj pl-rj"></td>
-              <td class="calc-ll-rj ll-rj"></td>
-            </tr>
-            <tr data-cat="borr" data-slot="3" class="slot-last">
-              <td><select class="icms-ent in-icms-ent-sp"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="17">17%</option><option value="18" selected>18%</option><option value="22">22%</option></select></td>
-              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
-              <td class="sugg-sp sugg2-sp"></td>
-              <td class="calc-sp tot-imp-sp"></td>
-              <td class="calc-sp subtot-sp"></td>
-              <td class="calc-sp pl-sp"></td>
-              <td class="calc-ll-sp ll-sp"></td>
-              <td><select class="icms-ent in-icms-ent-rj"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="17">17%</option><option value="18">18%</option><option value="22" selected>22%</option></select></td>
-              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
-              <td class="sugg-rj sugg2-rj"></td>
-              <td class="calc-rj tot-imp-rj"></td>
-              <td class="calc-rj subtot-rj"></td>
-              <td class="calc-rj pl-rj"></td>
-              <td class="calc-ll-rj ll-rj"></td>
-            </tr>
-            <!-- ===================== FERTILIZANTES ===================== -->
-            <tr data-cat="fertil" data-slot="1" class="slot-first">
-              <td class="label" rowspan="3"><span class="category-badge cat-badge-fertil">FERTILIZANTES</span></td>
-              <td class="input-cell" rowspan="3"><input type="number" step="0.01" class="in-custo-sp" value="14.95"></td>
-              <td class="rj-custo custo-rj" rowspan="3">15,16</td>
-              <td class="calc-sp markup-cell" rowspan="3">1,171</td>
-              <td><select class="icms-ent in-icms-ent-sp"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="17">17%</option><option value="18">18%</option><option value="22">22%</option></select></td>
-              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
-              <td class="sugg-sp sugg2-sp"></td>
-              <td class="calc-sp tot-imp-sp"></td>
-              <td class="calc-sp subtot-sp"></td>
-              <td class="calc-sp pl-sp"></td>
-              <td class="calc-ll-sp ll-sp"></td>
-              <td><select class="icms-ent in-icms-ent-rj"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="17">17%</option><option value="18">18%</option><option value="22">22%</option></select></td>
-              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
-              <td class="sugg-rj sugg2-rj"></td>
-              <td class="calc-rj tot-imp-rj"></td>
-              <td class="calc-rj subtot-rj"></td>
-              <td class="calc-rj pl-rj"></td>
-              <td class="calc-ll-rj ll-rj"></td>
-            </tr>
-            <tr data-cat="fertil" data-slot="2">
-              <td><select class="icms-ent in-icms-ent-sp"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="17">17%</option><option value="18">18%</option><option value="22">22%</option></select></td>
-              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
-              <td class="sugg-sp sugg2-sp"></td>
-              <td class="calc-sp tot-imp-sp"></td>
-              <td class="calc-sp subtot-sp"></td>
-              <td class="calc-sp pl-sp"></td>
-              <td class="calc-ll-sp ll-sp"></td>
-              <td><select class="icms-ent in-icms-ent-rj"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="17">17%</option><option value="18">18%</option><option value="22">22%</option></select></td>
-              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
-              <td class="sugg-rj sugg2-rj"></td>
-              <td class="calc-rj tot-imp-rj"></td>
-              <td class="calc-rj subtot-rj"></td>
-              <td class="calc-rj pl-rj"></td>
-              <td class="calc-ll-rj ll-rj"></td>
-            </tr>
-            <tr data-cat="fertil" data-slot="3" class="slot-last">
-              <td><select class="icms-ent in-icms-ent-sp"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="17">17%</option><option value="18" selected>18%</option><option value="22">22%</option></select></td>
-              <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
-              <td class="sugg-sp sugg2-sp"></td>
-              <td class="calc-sp tot-imp-sp"></td>
-              <td class="calc-sp subtot-sp"></td>
-              <td class="calc-sp pl-sp"></td>
-              <td class="calc-ll-sp ll-sp"></td>
-              <td><select class="icms-ent in-icms-ent-rj"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="17">17%</option><option value="18">18%</option><option value="22" selected>22%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option><option value="22" selected>22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
               <td class="sugg-rj sugg2-rj"></td>
               <td class="calc-rj tot-imp-rj"></td>
@@ -1883,7 +1441,7 @@ table.sim tbody tr[data-slot="3"] td:first-child {
               <td class="rj-custo custo-rj" rowspan="3">96,59</td>
               <td class="calc-sp markup-cell" rowspan="3">1,171</td>
               <td><select class="icms-ent in-icms-ent-sp"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="17">17%</option><option value="18">18%</option><option value="22">22%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
               <td class="sugg-sp sugg2-sp"></td>
               <td class="calc-sp tot-imp-sp"></td>
@@ -1891,7 +1449,7 @@ table.sim tbody tr[data-slot="3"] td:first-child {
               <td class="calc-sp pl-sp"></td>
               <td class="calc-ll-sp ll-sp"></td>
               <td><select class="icms-ent in-icms-ent-rj"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="17">17%</option><option value="18">18%</option><option value="22">22%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
               <td class="sugg-rj sugg2-rj"></td>
               <td class="calc-rj tot-imp-rj"></td>
@@ -1901,7 +1459,7 @@ table.sim tbody tr[data-slot="3"] td:first-child {
             </tr>
             <tr data-cat="feed" data-slot="2">
               <td><select class="icms-ent in-icms-ent-sp"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="17">17%</option><option value="18">18%</option><option value="22">22%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
               <td class="sugg-sp sugg2-sp"></td>
               <td class="calc-sp tot-imp-sp"></td>
@@ -1909,7 +1467,7 @@ table.sim tbody tr[data-slot="3"] td:first-child {
               <td class="calc-sp pl-sp"></td>
               <td class="calc-ll-sp ll-sp"></td>
               <td><select class="icms-ent in-icms-ent-rj"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="17">17%</option><option value="18">18%</option><option value="22">22%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7" selected>7%</option><option value="12">12%</option><option value="18">18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
               <td class="sugg-rj sugg2-rj"></td>
               <td class="calc-rj tot-imp-rj"></td>
@@ -1919,7 +1477,7 @@ table.sim tbody tr[data-slot="3"] td:first-child {
             </tr>
             <tr data-cat="feed" data-slot="3" class="slot-last">
               <td><select class="icms-ent in-icms-ent-sp"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="17">17%</option><option value="18" selected>18%</option><option value="22">22%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-sp"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="18" selected>18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-sp" value="105.01" readonly></td>
               <td class="sugg-sp sugg2-sp"></td>
               <td class="calc-sp tot-imp-sp"></td>
@@ -1927,7 +1485,7 @@ table.sim tbody tr[data-slot="3"] td:first-child {
               <td class="calc-sp pl-sp"></td>
               <td class="calc-ll-sp ll-sp"></td>
               <td><select class="icms-ent in-icms-ent-rj"><option value="4" selected>4%</option><option value="7">7%</option><option value="12">12%</option><option value="18">18%</option></select></td>
-              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="17">17%</option><option value="18" selected>18%</option><option value="22">22%</option></select></td>
+              <td><select class="icms-sel in-icms-sai-rj"><option value="4">4%</option><option value="7">7%</option><option value="12">12%</option><option value="18" selected>18%</option><option value="22">22%</option></select></td>
               <td class="input-cell ll-target-col"><input type="number" step="0.01" class="in-ll2-rj" value="105.01" readonly></td>
               <td class="sugg-rj sugg2-rj"></td>
               <td class="calc-rj tot-imp-rj"></td>
@@ -1983,38 +1541,26 @@ const STORAGE_KEY = 'simulador_precos_v2';
 
 /* ========= FIXED TAXES ========= */
 const FIXED = {
-  food:   { pis_deb:1.65, cofins_deb:7.6, pis_cred:1.65, cofins_cred:7.6, csll:1, do:7.6, corretor:0, markup:1.171 },
-  cosm:   { pis_deb:1.65, cofins_deb:7.6, pis_cred:1.65, cofins_cred:7.6, csll:1, do:3.8, corretor:0, markup:1.171 },
-  tinta:  { pis_deb:1.65, cofins_deb:7.6, pis_cred:1.65, cofins_cred:7.6, csll:1, do:3.8, corretor:0, markup:1.171 },
-  domiss: { pis_deb:1.65, cofins_deb:7.6, pis_cred:1.65, cofins_cred:7.6, csll:1, do:3.8, corretor:0, markup:1.171 },
-  borr:   { pis_deb:1.65, cofins_deb:7.6, pis_cred:1.65, cofins_cred:7.6, csll:1, do:3.8, corretor:0, markup:1.171 },
-  fertil: { pis_deb:1.65, cofins_deb:7.6, pis_cred:1.65, cofins_cred:7.6, csll:1, do:3.8, corretor:0, markup:1.171 },
-  feed:   { pis_deb:1.65, cofins_deb:7.6, pis_cred:1.65, cofins_cred:7.6, csll:1, do:3.8, corretor:0, markup:1.171 }
+  food: { pis_deb:1.65, cofins_deb:7.6, pis_cred:1.65, cofins_cred:7.6, csll:1, do:7.6, corretor:0, markup:1.171 },
+  cosm: { pis_deb:1.65, cofins_deb:7.6, pis_cred:1.65, cofins_cred:7.6, csll:1, do:3.8, corretor:0, markup:1.171 },
+  feed: { pis_deb:1.65, cofins_deb:7.6, pis_cred:1.65, cofins_cred:7.6, csll:1, do:3.8, corretor:0, markup:1.171 }
 };
 
 const ICMS_DEFAULTS = {
-  food:   { cred: 4,  deb: 22 },
-  cosm:   { cred: 4,  deb: 22 },
-  tinta:  { cred: 4,  deb: 22 },
-  domiss: { cred: 4,  deb: 22 },
-  borr:   { cred: 4,  deb: 22 },
-  fertil: { cred: 4,  deb: 22 },
-  feed:   { cred: 4,  deb: 12 }
+  food: { cred: 4,  deb: 22 },
+  cosm: { cred: 4,  deb: 22 },
+  feed: { cred: 4,  deb: 12 }
 };
 let ICMS_CAT = JSON.parse(JSON.stringify(ICMS_DEFAULTS));
 let FREIGHT_RJ = 0.21;
 
 const ROW_DEFAULTS = {
-  food:   { custo_sp: 14.95, ll2_sp: 105.01, ll2_rj: 105.01, icms_ent: 4,  icms_sai: 22 },
-  cosm:   { custo_sp: 14.95, ll2_sp: 105.01, ll2_rj: 105.01, icms_ent: 4,  icms_sai: 22 },
-  tinta:  { custo_sp: 14.95, ll2_sp: 105.01, ll2_rj: 105.01, icms_ent: 4,  icms_sai: 22 },
-  domiss: { custo_sp: 14.95, ll2_sp: 105.01, ll2_rj: 105.01, icms_ent: 4,  icms_sai: 22 },
-  borr:   { custo_sp: 14.95, ll2_sp: 105.01, ll2_rj: 105.01, icms_ent: 4,  icms_sai: 22 },
-  fertil: { custo_sp: 14.95, ll2_sp: 105.01, ll2_rj: 105.01, icms_ent: 4,  icms_sai: 22 },
-  feed:   { custo_sp: 96.38, ll2_sp: 105.01, ll2_rj: 105.01, icms_ent: 4,  icms_sai: 12 }
+  food: { custo_sp: 14.95, ll2_sp: 105.01, ll2_rj: 105.01, icms_ent: 4,  icms_sai: 22 },
+  cosm: { custo_sp: 14.95, ll2_sp: 105.01, ll2_rj: 105.01, icms_ent: 4,  icms_sai: 22 },
+  feed: { custo_sp: 96.38, ll2_sp: 105.01, ll2_rj: 105.01, icms_ent: 4,  icms_sai: 12 }
 };
 
-const CAT_LABELS = { food: 'FOOD', cosm: 'COSMÉTICOS', tinta: 'TINTAS', domiss: 'DOMISSANITÁRIOS', borr: 'BORRACHA', fertil: 'FERTILIZANTES', feed: 'FEED' };
+const CAT_LABELS = { food: 'FOOD', cosm: 'COSMÉTICOS', feed: 'FEED' };
 
 /* ========= PERSISTENCE ========= */
 function saveState() {
@@ -2092,7 +1638,7 @@ function loadState() {
 }
 
 function readTaxesFromForm() {
-  ['food','cosm','tinta','domiss','borr','fertil','feed'].forEach(cat => {
+  ['food','cosm','feed'].forEach(cat => {
     const credEl = document.getElementById(`tax_${cat}_icms_cred`);
     const debEl = document.getElementById(`tax_${cat}_icms_deb`);
     if (credEl) ICMS_CAT[cat].cred = parseFloat(credEl.value) || 0;
@@ -2103,7 +1649,7 @@ function readTaxesFromForm() {
   if (flbl) flbl.textContent = FREIGHT_RJ.toFixed(2).replace('.', ',');
 }
 function writeTaxesToForm() {
-  ['food','cosm','tinta','domiss','borr','fertil','feed'].forEach(cat => {
+  ['food','cosm','feed'].forEach(cat => {
     const credEl = document.getElementById(`tax_${cat}_icms_cred`);
     const debEl = document.getElementById(`tax_${cat}_icms_deb`);
     if (credEl) credEl.value = ICMS_CAT[cat].cred;
@@ -2208,11 +1754,9 @@ function fmt3(n) { return (isFinite(n) ? n : 0).toFixed(3).replace('.', ','); }
  */
 const LL_TARGET_DEFAULT = 105.01;
 const LL_TARGET_OVERRIDE = 110.01;
-// Categorias que seguem a mesma regra do COSM (D.O. 3,80% + LL=110,01% em ent 18% c/ sai 4% ou 7%)
-const COSM_LIKE_CATS = ['cosm', 'tinta', 'domiss', 'borr', 'fertil'];
 function getLLTarget(cat, icmsCredPct, icmsDebPct) {
   if (cat === 'food' && icmsCredPct === 18 && icmsDebPct === 4) return LL_TARGET_OVERRIDE;
-  if (COSM_LIKE_CATS.includes(cat) && icmsCredPct === 18 && (icmsDebPct === 4 || icmsDebPct === 7)) return LL_TARGET_OVERRIDE;
+  if (cat === 'cosm' && icmsCredPct === 18 && (icmsDebPct === 4 || icmsDebPct === 7)) return LL_TARGET_OVERRIDE;
   return LL_TARGET_DEFAULT;
 }
 function iterateSugg02(custo, ll2Target, cat, icmsDebPct, icmsCredPct) {
@@ -2354,13 +1898,9 @@ function getSlotState() {
   } catch(e) {}
   // Default: todos ativos
   return {
-    food:   { '1': true, '2': true, '3': true },
-    cosm:   { '1': true, '2': true, '3': true },
-    tinta:  { '1': true, '2': true, '3': true },
-    domiss: { '1': true, '2': true, '3': true },
-    borr:   { '1': true, '2': true, '3': true },
-    fertil: { '1': true, '2': true, '3': true },
-    feed:   { '1': true, '2': true, '3': true }
+    food: { '1': true, '2': true, '3': true },
+    cosm: { '1': true, '2': true, '3': true },
+    feed: { '1': true, '2': true, '3': true }
   };
 }
 function saveSlotState(state) {
@@ -2373,7 +1913,7 @@ function isSlotActive(cat, slot) {
 }
 function recalcRowspans() {
   // Para cada categoria, conta slots ativos e define rowspan nas células da linha 1 (label/custo/etc.)
-  ['food','cosm','tinta','domiss','borr','fertil','feed'].forEach(cat => {
+  ['food','cosm','feed'].forEach(cat => {
     const activeCount = ['1','2','3'].filter(s => isSlotActive(cat, s)).length;
     const primary = document.querySelector(`#simTable tbody tr[data-cat="${cat}"][data-slot="1"]`);
     if (!primary) return;
@@ -2393,7 +1933,7 @@ function applySlotFilter() {
     row.classList.remove('slot-last');
   });
   // Adiciona slot-last na última linha ativa de cada categoria
-  ['food','cosm','tinta','domiss','borr','fertil','feed'].forEach(cat => {
+  ['food','cosm','feed'].forEach(cat => {
     const activeRows = Array.from(document.querySelectorAll(`#simTable tbody tr[data-cat="${cat}"]`))
       .filter(r => !r.classList.contains('slot-disabled'));
     if (activeRows.length) activeRows[activeRows.length - 1].classList.add('slot-last');
@@ -2447,7 +1987,7 @@ function bindTabs() {
 }
 
 function bindTaxForm() {
-  ['food','cosm','tinta','domiss','borr','fertil','feed'].forEach(cat => {
+  ['food','cosm','feed'].forEach(cat => {
     const credEl = document.getElementById(`tax_${cat}_icms_cred`);
     const debEl = document.getElementById(`tax_${cat}_icms_deb`);
     if (credEl) credEl.addEventListener('change', () => { /* aguarda Salvar */ });
@@ -2593,16 +2133,8 @@ function buildExportSnapshot() {
     return { icms_ent_sp: icmsEntSP, icms_sai_sp: icmsSaiSP, icms_ent_rj: icmsEntRJ, icms_sai_rj: icmsSaiRJ, sug_sp: sugSP, sug_rj: sugRJ };
   });
 
-
   const icmsEntCabecalho = scenarioRows[0]?.icms_ent_sp || 0;
-
-  const catColor = baseCat === 'food'   ? '#5b9bd5'
-                 : baseCat === 'cosm'   ? '#e8a73c'
-                 : baseCat === 'tinta'  ? '#8b5cf6'
-                 : baseCat === 'domiss' ? '#ec4899'
-                 : baseCat === 'borr'   ? '#374151'
-                 : baseCat === 'fertil' ? '#eab308'
-                 : '#7fb84a';
+  const catColor = baseCat === 'food' ? '#5b9bd5' : (baseCat === 'cosm' ? '#e8a73c' : '#7fb84a');
 
   wrap.innerHTML = `
     <div style="border:2px solid #000; background:#fff;">
